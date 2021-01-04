@@ -1,0 +1,24 @@
+section {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.bg-light {
+  background-color: #444444 !important;
+  color: white;
+}
+
+.overlay-circle {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.red-transparent {
+  background-color: #F59783;
+}
+
+.yellow-transparent {
+  background-color: #f5d583;
+}

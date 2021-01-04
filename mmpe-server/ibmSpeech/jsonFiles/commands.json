@@ -1,0 +1,321 @@
+{
+  "operations": "pattern",
+
+  "delete x": {
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "",
+    "preposition": ""
+  },
+  "delete count x": {
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "",
+    "preposition": ""
+  },
+  "delete x before yCount y": {
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+  "delete x before y": {
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+  "delete count x at y":{
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+  "delete count x at yCount y":{
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+  "delete x after yCount y": {
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "z",
+    "preposition": "p2"
+  },
+  "delete x after y": {
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "z",
+    "preposition": "p2"
+  },
+  "delete x between y and z": {
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "z",
+    "preposition": "p"
+  },
+  "delete x at y": {
+    "operation": "delete",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": ""
+  },
+
+  "insert x": {
+    "operation": "insert",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "",
+    "preposition": ""
+  },
+
+  "insert x before yCount y": {
+    "operation": "insert",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+  "insert x before y": {
+    "operation": "insert",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+  "insert x after yCount y": {
+    "operation": "insert",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "z",
+    "preposition": "p2"
+  },
+  "insert x after y": {
+    "operation": "insert",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "z",
+    "preposition": "p2"
+  },
+  "insert x at y": {
+    "operation": "insert",
+    "entity": "x",
+    "count": 0,
+    "ycount": -1,
+    "wordY": "",
+    "wordZ": "",
+    "preposition": "p3"
+  },
+  "insert x between y and z": {
+    "operation": "insert",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "z",
+    "preposition": "p"
+  },
+
+  "move x": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "",
+    "preposition": ""
+  },
+  "move count x": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "",
+    "preposition": ""
+  },
+  "move x before y": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+
+  "move count x before y": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+
+  "move before y": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+
+  "move count x after y": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "z",
+    "preposition": "p2"
+  },
+
+  "move x after y": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "z",
+    "preposition": "p2"
+  },
+  "move x before yCount y": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p1"
+  },
+  "move x after yCount y": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "z",
+    "preposition": "p2"
+  },
+  "move x between y and z": {
+    "operation": "move",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "z",
+    "preposition": "p"
+  },
+
+  "replace x between y and z by a": {
+    "operation": "replace",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "z",
+    "wordA":"a",
+    "preposition": "p4"
+  },
+  "replace x by y": {
+    "operation": "replace",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p3"
+  },
+
+  "replace x before yCount y by z": {
+    "operation": "replace",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "z",
+    "preposition": "p1"
+  },
+  "replace x before y by z": {
+    "operation": "replace",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "z",
+    "preposition": "p1"
+  },
+  "replace x after y by z": {
+    "operation": "replace",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "z",
+    "preposition": "p2"
+  },
+  "replace count x by y": {
+    "operation": "replace",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "y",
+    "wordZ": "",
+    "preposition": "p2"
+  },
+
+  "restate x": {
+    "operation": "restate",
+    "entity": "x",
+    "count": 0,
+    "ycount": 0,
+    "wordY": "",
+    "wordZ": "",
+    "preposition": "p1"
+  }
+}

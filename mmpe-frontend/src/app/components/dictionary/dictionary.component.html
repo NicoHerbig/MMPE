@@ -1,0 +1,35 @@
+<h4>Ask Linguee</h4>
+
+<div class="row">
+  <div class="col-12 pr-0">
+    <form>
+        <input type="text" id="text-input-linguee" (input)="onSearchTermEnter($event)" placeholder="enter search term">
+    </form>
+  </div>
+<!-- #### Uncomment this block to enable language selection (and consequently change the previous block to col-7)
+  <div class="col-5 pl-0">
+    From: <select [(ngModel)]="from" (change)="onLanguageChange()">
+      <option *ngFor="let lang of supportedLanguages" [ngValue]="lang">{{lang}}</option>
+    </select> <br>
+    To: <select [(ngModel)]="to" (change)="onLanguageChange()">
+      <option *ngFor="let lang of supportedLanguages" [ngValue]="lang">{{lang}}</option>
+    </select>
+  </div> -->
+</div>
+
+<div *ngIf="error">
+  Could not translate {{searchTerm}} from {{from}} to {{to}}.
+</div>
+
+<div id="response" *ngIf="response && !error">
+  <div class="word-section" *ngFor="let word of response['words']">
+    <span class="word">{{word['term']}}</span> <span class="word-additional-info" *ngIf="word['additionalInfo']">{{word['additionalInfo']}}</span> <span class="word-type" *ngIf="word['type']">{{word['type']}}</span>
+    <div class="translation-section" *ngFor="let translation of word['translations']">
+      <span class="translated word-translation">{{translation['term']}}</span>
+      <div class="word-example" *ngFor="let example of translation['examples']">
+        {{example['from']}} <br>
+        <span class="translated">{{example['to']}}</span>
+      </div>
+    </div>
+  </div>
+</div>

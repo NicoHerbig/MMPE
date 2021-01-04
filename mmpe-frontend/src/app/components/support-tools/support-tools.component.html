@@ -1,0 +1,17 @@
+<section style="display: block;" class="pt-2">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="section-heading">Support Tools</h2>
+      <hr class="light"/>
+      <h4>Original MT</h4>
+      <p>{{mt}}</p>
+      <button #resetButton id="resetButton" (touchstart)="onMainDivReset($event)" (mousedown)="onMainDivReset($event)">Reset Edit Area</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <hr class="light"/>
+      <app-dictionary></app-dictionary>
+    </div>
+  </div>
+</section>

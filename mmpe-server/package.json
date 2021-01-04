@@ -1,0 +1,43 @@
+{
+  "name": "mmpe_nodeserver",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "@types/node": "^12.12.24",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "envdot": "0.0.3",
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.0.0",
+    "express-secure-only": "^0.2.1",
+    "express-ws": "^4.0.0",
+    "ibm-watson": "^4.5.4",
+    "line-reader": "^0.4.0",
+    "linguee": "^1.0.1",
+    "node-pty": "^0.9.0",
+    "simple-spellchecker": "^0.9.9",
+    "strip-ansi": "^6.0.0",
+    "vcap_services": "^0.7.1",
+    "watson-developer-cloud": "^4.0.1",
+    "watson-speech": "^0.36.6",
+    "leapjs": "0.6.4"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false,
+    "crypto": false,
+    "stream": false,
+    "http": false,
+    "tls": false,
+    "zlib": false,
+    "https": false,
+    "net": false
+  }
+}

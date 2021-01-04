@@ -1,0 +1,26 @@
+<div class="row p-0 m-0 bg-inherit">
+
+    <div class="col small-column p-0 align-self-center text-center">
+      {{segment.id}}
+      <!--<p>{{segment.sourceLanguage}} -> {{segment.targetLanguage}}</p>-->
+    </div>
+
+    <div class="col pr-0 pl-0 pt-1 pb-1">{{segment.source}}</div>
+
+    <div class="col small-column p-0 d-inline-block text-center align-self-center">
+      <div [ngSwitch]="segment.segmentStatus">
+        <div *ngSwitchCase="SegmentStatus[SegmentStatus[SegmentStatus.Confirmed]]"><!-- Strange way to convert to enum entry to int -->
+          <i class="fa fa-check"></i>
+        </div>
+        <div *ngSwitchCase="SegmentStatus[SegmentStatus[SegmentStatus.Unconfirmed]]">
+          <i class="fa fa-file"></i>
+        </div>
+        <div *ngSwitchCase="SegmentStatus[SegmentStatus[SegmentStatus.Active]]">
+          <i class="fa fa-pencil"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col pr-0 pl-2 pt-1 pb-1">{{segment.target}}</div>
+
+</div>

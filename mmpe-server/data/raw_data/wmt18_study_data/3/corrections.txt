@@ -1,0 +1,16 @@
+REORDER#Westlich liegt der Fußballplatz des TSV München Ost, <span class="correct">östlich</span> Wohnhäuser aus den 1980er Jahren <span class="wrong">östlich</span>.
+REORDER#Ab 1872 leitete Dr. Bernhard von Gudden die Einrichtung - <span class="correct">jener</span> Psychiater <span class="wrong">jener</span>, der in Zusammenhang mit dem Tod von König Ludwigs II. gebracht wird.
+REORDER#Außerdem hat er <span class="wrong">untersagt</span> dem Personal <span class="correct">untersagt</span> , Gewalt gegen die Insassen anzuwenden", sagt Hermann Wilhelm, Leiter des Museums Haidhausen, der sich für eine Ausstellung mit der Anstalt beschäftigt hat.
+REORDER#Für 280 Patienten war <span class="correct">zunächst</span> Platz gewesen <span class="wrong">zunächst</span>, später wurde auf 500 Plätze erweitert.
+INSERT#Die Stadt hat sich <span class="correct">in alle Richtungen</span> ausgedehnt und ist zusammengewachsen.
+INSERT#Napoleon wünschte sich einen Überblick <span class="correct">über</span> das besetzte Land und gab eine topographische Aufnahme Bayerns in Auftrag - natürlich zu militärischen Zwecken.
+INSERT#Das Urpositionsblatt für München stammt aus dem Jahr 1856 und ist wie <span class="correct">sämtliche</span> andere auf der Internetseite der Bayerischen Landesbibliothek zu finden.
+INSERT#Ein Beispiel <span class="correct">dafür ist</span> Untersendling, das in der Karte von 1856 noch relativ isoliert auftaucht.
+REPLACE#In die große Übersichtskarte <span class="wrong">wurde</span><span class="correct">wurden</span> für Städte und Gemeinden detailliertere Karten, sogenannte Urpositionsblätter, eingearbeitet.
+REPLACE#Eine Gruftkapelle, wo nun für den S-Bahn-Tunnel gegraben <span class="wrong">sind</span><span class="correct">wird</span>.
+REPLACE#Besonders wenn <span class="wrong">eins</span><span class="correct">man</span> sie mit aktuellen Online-Karten vergleicht.
+REPLACE#Eine große Grünfläche <span class="wrong">zeichnete</span><span class="correct">zeichnet</span> sich nördlich von Untersendling ab.
+DELETE#Die Häuser Untersendlings konzentrierten <span class="wrong">konzentrierten</span> sich um 1856 entlang der heutigen Plinganserstraße, die erst 1878 nach Georg Sebastian Plinganser benannt wurde, einem Anführer des Aufstands der bayerischen Bauern gegen Österreich 1705.
+DELETE#Wo heute der Westpark ist, sieht man nichts <span class="wrong">anderes mehr</span> als Felder - auf den ersten Blick: Beim Hineinzoomen erscheint eine kleinteiligere Karte mit dutzenden Linien und Zahlen: handschriftlich nummerierte Flurstücke aus der sogenannten "Uraufnahme", aus der die Grundsteuer abgeleitet wurde.
+DELETE#Kleine Parzellen belegen dort heute keine Landwirte mehr - sondern <span class="wrong">nur noch</span> Kleingärtner der Anlage "Land in Sonne".
+DELETE#Auf der anderen Seite der Isar gibt die historische Karte einen Einblick in die <span class="wrong">historische</span> Geschichte der psychiatrischen Medizin.

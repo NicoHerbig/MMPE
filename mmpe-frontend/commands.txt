@@ -1,0 +1,19 @@
+ersetze X durch Y
+ändere X zu Y
+ändere X durch Y
+lösche X
+Lösche zweites Wort
+Lösche drittes Wort
+Füge Wort am Anfang ein
+Lösche erstes Wort
+Füge Wort am Ende ein
+Ersetze erstes Wort mit Sie
+lösche früher ihre.
+ersetzen früher nach die durch später
+ersetze früher nach die durch später
+bewege kunden nach zweites CDs.
+bewege kunden zwischen früher und ihre.
+bewege erstes Wort nach Vinyl.
+Füge weiter oder nach jetzt ein
+einfügen verkauften vor Kunden
+füge hallo vor kaufen ein

@@ -1,0 +1,81 @@
+<nav class="navbar navbar-light navbar-toggleable-md bg-primary navbar-expand-lg">
+
+  <a class="navbar-brand" href="#">
+    <img height=50 src="../../../assets/images/mmpe_logo_square.png" alt="MMPE-Logo">
+  </a>
+
+  <button class="navbar-toggler ml-auto" type="button" (click)="toggleNavbar()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div *ngIf="project" class="custom-nav-item" id="project-description-area">
+    {{project.projectname}}
+  </div>
+
+  <div class="collapse navbar-collapse" id="navbarNavDropdown" [ngClass]="{ 'show': navbarOpen }">
+    <ul class="nav">
+      <li class="custom-nav-item">
+        <a class="nav-text" href="#">Home</a>
+      </li>
+      <li class="custom-nav-item">
+        <p class="nav-text" (touchstart)="onSave($event)" (mousedown)="onSave($event)">save</p>
+      </li>
+      <li class="custom-nav-item" *ngIf="enableSpellcheck">
+        <label class="nav-text" for="spellcheckSwitch">Spellcheck</label>
+        <input type="checkbox" class="align-self-center" id="spellcheckSwitch" (touchstart)="onSpellSwitch($event)" (mousedown)="onSpellSwitch($event)">
+      </li>
+            <li class="custom-nav-item" *ngIf="enableWhiteSpace">
+        <label class="nav-text" for="whitespaceSwitch">Whitespace ¶</label>
+        <input type="checkbox" class="align-self-center" style="margin-left:5px" id="whitespaceSwitch" (touchstart)="onWhitespaceSwitch($event)" (mousedown)="onWhitespaceSwitch($event)">
+      </li>
+      <li class="custom-nav-item" *ngIf="enableEyeTracking">
+        <label class="nav-text align-self-center" for="whitespaceSwitch">Eye Tracking&nbsp;</label>
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn btn-secondary btn-sm" id="dropdownBasic1" ngbDropdownToggle>{{selectedEyeTracker}}</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem (touchstart)="onEyetrackingDropdown($event)" (mousedown)="onEyetrackingDropdown($event)">None</button>
+            <button ngbDropdownItem [disabled]="selectedEyeTracker !== 'None'" (touchstart)="onEyetrackingDropdown($event)" (mousedown)="onEyetrackingDropdown($event)">Test</button>
+            <button ngbDropdownItem [disabled]="selectedEyeTracker !== 'None'" (touchstart)="onEyetrackingDropdown($event)" (mousedown)="onEyetrackingDropdown($event)">Tobii 4C Pro</button>
+            <button ngbDropdownItem [disabled]="selectedEyeTracker !== 'None'" (touchstart)="onEyetrackingDropdown($event)" (mousedown)="onEyetrackingDropdown($event)">Pupil</button>
+          </div>
+        </div>
+      </li>
+      <li class="custom-nav-item" *ngIf="enableSpeech">
+        <label class="nav-text" for="speechSwitch">Speech</label>
+        <input type="checkbox" class="align-self-center" id="speechSwitch" (touchstart)="onSpeechSwitch($event)" (mousedown)="onSpeechSwitch($event)">
+      </li>
+      <li class="custom-nav-item" *ngIf="enableMidairGestures">
+        <label class="nav-text" for="midairGestures">Gestures</label>
+        <input type="checkbox" class="align-self-center" id="midairGestures" (touchstart)="onMidairGesturesSwitch($event)" (mousedown)="onMidairGesturesSwitch($event)">
+
+      </li>
+    </ul>
+  </div>
+</nav>
+<div id="senstivityPanel" class="bg-primary col-2" style="float: right; display: none;">
+<button (mousedown)="onMidairGesturesCloseSenstivityPanel('hide')" type="button" style="position: absolute; float: right; right:0; top:0; font-size:10px; border-radius: 0; " class="btn bg-secondary">X</button>
+  <span class="pt-2">Gestures Sensitivity:</span>
+  <div class="row pt-2">
+    <div class="col col-sm-12">
+      <div class="form-group ">
+        <label id="midairGesturesCaretSenstivityView" for="midairGesturesCaretSenstivity">Caret Movement</label>
+        <input class="form-control-range ml-0" gesture="caretSensitivity" type="range" min="1" max="10" value="5" id="midairGesturesCaretSenstivity" (mouseup)="onMidairGesturesSenstivity($event)" >
+      </div>
+      <div class="form-group ">
+        <label id="midairGesturesDeleteSenstivityView" for="midairGesturesDeleteSenstivity">Deletion</label>
+        <input class="form-control-range ml-0" gesture="deleteSensitivity" type="range" min="1" max="10" value="5" id="midairGesturesDeleteSenstivity" (mouseup)="onMidairGesturesSenstivity($event)" >
+      </div>
+      <div class="form-group ">
+        <label id="midairGesturesSelectSenstivityView" for="midairGesturesSelectSenstivity">Selection</label>
+        <input class="form-control-range ml-0" gesture="selectSensitivity" type="range" min="1" max="10" value="5" id="midairGesturesSelectSenstivity" (mouseup)="onMidairGesturesSenstivity($event)" >
+      </div>
+      <div class="form-group ">
+        <label id="midairGesturesReorderSenstivityView" for="midairGesturesReorderSenstivity">Reordering</label>
+        <input class="form-control-range ml-0" gesture="reorderSensitivity" type="range" min="1" max="10" value="5" id="midairGesturesReorderSenstivity" (mouseup)="onMidairGesturesSenstivity($event)" >
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <p id="gesturesOutput"></p>
+  </div>
+</div>

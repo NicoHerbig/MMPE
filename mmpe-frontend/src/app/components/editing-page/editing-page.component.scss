@@ -1,0 +1,24 @@
+$navbar-height: 74px;
+
+div.row {
+  width: 100%;
+  margin: 0;
+}
+
+#page-navbar {
+  height: $navbar-height;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+#page-content {
+  margin-top: $navbar-height;
+}
+
+#support-tools {
+  position: fixed;
+  top: $navbar-height;
+  right: 0;
+  height: 100%;
+}

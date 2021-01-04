@@ -1,0 +1,8 @@
+{
+  "ibmSpeech": {
+    "username": "youremail@address.de",
+    "password": "yourPassword",
+    "iamApikey": "yourApiKey",
+    "url": "https://stream-fra.watsonplatform.net/speech-to-text/api"
+  }
+}

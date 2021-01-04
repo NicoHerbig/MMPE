@@ -1,0 +1,105 @@
+#custom-navbar {
+  height: 74px;
+
+  font-size: 20px;
+  color: black;
+  text-transform: none;
+  font-weight: 600;
+  cursor: default;
+}
+
+img {
+  margin-right: 36px;
+}
+
+
+/* 'Open Sans' font from Google Fonts */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+
+.login {
+  width: 400px;
+  margin: 16px auto;
+  font-size: 16px;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.login-header,
+.login p {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family:'Helvetica Neue', Arial, sans-serif;
+}
+
+.login-triangle {
+  width: 0;
+  margin-right: auto;
+  margin-left: auto;
+  border: 12px solid transparent;
+  border-bottom-color: rgb(15, 66, 107);
+}
+
+.login-header {
+  background: #F05F40;
+  padding: 20px;
+  font-size: 1.4em;
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+  color:black;
+}
+
+.login-container {
+  background:#545b62;
+  padding: 12px;
+}
+
+.login p {
+  padding: 12px;
+}
+
+.login input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 16px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 0.95em;
+}
+
+.login input[type="email"],
+.login input[type="password"] {
+  background: #fff;
+  border-color: #bbb;
+  color: #555;
+}
+
+.login input[type="email"]:focus,
+.login input[type="password"]:focus {
+  border-color: #888;
+}
+
+.login input[type="submit"] {
+  background: black;
+  border-color: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.login input[type="submit"]:hover {
+  background:orangered;
+}
+
+.login input[type="submit"]:focus {
+  border-color: #05a;
+}
+
+.has-error input[type="email"],
+.has-error input[type="password"] {
+    border-color: rgb(216, 12, 12);
+    color: rgb(230, 14, 14);
+}

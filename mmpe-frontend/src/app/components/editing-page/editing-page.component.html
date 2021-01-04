@@ -1,0 +1,24 @@
+<div class="row bg-primary" id="page-navbar">
+  <div class="col-12 pr-0 pl-0 h-100">
+    <app-navbar
+      [project]="project" (spelling)="onSpellcheckSwitch($event)"
+      (speech)="onSpeechSwitch($event)"
+      (save)="onSave($event)"
+      (whiteSpace)="onWhitespaceSwitch($event)"
+      (eyeTracking)="onEyeTrackingSwitch($event)"
+      (midairGestures)="onMidairGesturesOperations($event)"></app-navbar>
+  </div>
+</div>
+
+<div class="row" id="page-content">
+
+  <div class="col-10 pr-0 pl-0" *ngIf="project">
+    <app-segments [supportTools]="supportTools" [project]="project" (dictionaryEvent)="onDictionary($event)"></app-segments>
+  </div>
+
+  <div class="col-2 bg-secondary text-light" id="support-tools">
+    <app-support-tools #supportTools (resetMainDiv)="onMainDivReset($event)"></app-support-tools>
+  </div>
+
+</div>
+

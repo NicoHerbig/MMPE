@@ -1,0 +1,75 @@
+#response {
+  margin-top: 5%;
+  max-height: 60vh;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-color: #444444 #222222;
+  scrollbar-width: thin;
+}
+
+#text-input-linguee {
+
+  width: 80%;
+
+  color: white;
+  caret-color: white;
+  background: #222222;
+
+  border-style: none;
+  border-bottom-style: solid;
+  border-color: white;
+}
+
+::selection{
+  background: white;
+  color: #222222;
+}
+
+.word-section {
+  margin-bottom: 8%;
+}
+
+.word {
+  font-size: 20px;
+}
+
+.word-additional-info {
+  font-size: 14px;
+  margin-left: 0.5em;
+}
+
+.word-type {
+  font-size: 14px;
+  font-style: italic;
+  margin-left: 0.5em;
+}
+
+.word-translation {
+  margin-left: 0.5em;
+}
+
+.translation-section {
+  margin-top: 4%;
+}
+
+.translated {
+  color: #F05F40;
+}
+
+.word-example {
+  font-style: italic;
+  font-size: 14px;
+  margin-left: 1.5em;
+}
+
+select {
+  float: right;
+
+  background: #444444;
+  color: white;
+  border-style: none;
+  border-radius: 5px;
+  padding: 1px 1px 1px 1px;
+}
+

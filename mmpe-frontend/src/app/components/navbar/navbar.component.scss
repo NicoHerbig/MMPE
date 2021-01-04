@@ -1,0 +1,54 @@
+$default-color: rgba(0, 0, 0, 0.5);
+
+input {
+  margin-left: 6%;
+}
+
+p:hover {
+  cursor: pointer;
+  color: adjust_color($default-color, $alpha: 0.2);
+}
+
+li>a:hover {
+  transition: color 0s ease;
+  cursor: pointer;
+  color: adjust_color($default-color, $alpha: 0.2);
+  text-decoration: none;
+}
+
+li>a:active, li>p:active {
+  text-decoration: none;
+  transition: color 0s ease;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+li>a {
+  font-size: 16px;
+  color: $default-color;
+}
+
+.nav-text {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 16px;
+  color: $default-color;
+  margin: 0 0 0 0;
+}
+
+.custom-nav-item {
+  padding: 0.5em 1em;
+  margin:auto;
+  display: inherit
+}
+
+#project-description-area {
+  min-width: 8em;
+  font-size: 20px;
+  color: black;
+  text-transform: none;
+  font-weight: 600;
+  cursor: default;
+}

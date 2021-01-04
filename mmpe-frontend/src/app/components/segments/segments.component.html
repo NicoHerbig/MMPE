@@ -1,0 +1,52 @@
+<div id="eye-tracking-div-gaze" #eyeCircleGaze class="overlay-circle red-transparent" [hidden]="!eyeTrackingRunning"></div>
+<div id="eye-tracking-div-fixation" #eyeCircleFixation class="overlay-circle yellow-transparent" [hidden]="true"></div>
+<div id="eye-tracking-div-last-source-fixation" #eyeCircleFixationLastSrc class="overlay-circle yellow-transparent" [hidden]="true"></div>
+<div id="eye-tracking-div-last-target-fixation" #eyeCircleFixationLastTgt class="overlay-circle yellow-transparent" [hidden]="true"></div>
+
+<section style="display: block;" class="bg-dark p-0" *ngIf="project.segments.indexOf(selectedSegment) > 0">
+  <div>
+    <ng-container *ngFor="let segment of project.segments">
+      <!--suppress XmlDuplicatedId -->
+      <app-segment
+        *ngIf="project.segments.indexOf(selectedSegment) > project.segments.indexOf(segment)"
+        [segment]="segment"
+        [class.bg-dark]="project.segments.indexOf(segment) % 2 === 0"
+        [class.bg-light]="project.segments.indexOf(segment) % 2 === 1"
+        id="{{ 'segment' + segment.id }}"
+        (dblclick)="onSelect(segment, $event, null)"
+        ></app-segment>
+      <!-- (touchstart)="onTouchStart()" (touchmove)="onTouchMove()" (touchend)="onSelect(segment, $event, null)"-->
+    </ng-container>
+  </div>
+</section>
+
+<section #selectedSegmentSection style="display: block;" *ngIf="selectedSegment">
+  <div>
+    <!--<h2 class="section-heading">Current Segment</h2>-->
+    <!--<hr class="light"/>-->
+    <app-segment-detail
+      [selectedSegment]="selectedSegment"
+      (confirmSegmentEvent)="confirmSegment($event)"
+      (saveSegmentEvent)="saveSegment()"
+      (dictionaryEvent)="onDictionary($event)"
+      id="{{ 'segment' + selectedSegment.id }}"></app-segment-detail>
+  </div>
+</section>
+
+<section style="display: block;"
+         *ngIf="project.segments.indexOf(selectedSegment) < project.segments.length  - 1">
+  <div>
+    <ng-container *ngFor="let segment of project.segments">
+      <!--suppress XmlDuplicatedId -->
+      <app-segment
+        *ngIf="project.segments.indexOf(selectedSegment) < project.segments.indexOf(segment)"
+        [segment]="segment"
+        [class.bg-dark]="project.segments.indexOf(segment) % 2 === 0"
+        [class.bg-light]="project.segments.indexOf(segment) % 2 === 1"
+        id="{{ 'segment' + segment.id }}"
+        (dblclick)="onSelect(segment, $event, null)"
+        ></app-segment>
+      <!--(touchstart)="onTouchStart()" (touchmove)="onTouchMove()" (touchend)="onSelect(segment, $event, null)"-->
+    </ng-container>
+  </div>
+</section>

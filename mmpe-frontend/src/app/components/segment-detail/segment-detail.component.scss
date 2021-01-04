@@ -1,0 +1,163 @@
+@import '../../../../node_modules/myscript/dist/myscript.min.css';
+
+$large-font: 11mm; // should be in sync with editor settings in component.ts ngAfterViewInit
+$line-height: 1.4; // should be in sync with editor settings in component.ts ngAfterViewInit
+$primary-color: #F05F40;
+
+.bold{
+  font-weight: bold;
+}
+.left{
+  padding-left: 5px;
+}
+.large
+{
+  font-size: $large-font;
+  line-height: $line-height;
+}
+
+#handwritingDiv
+{
+  margin: auto;
+  align-items: initial;
+  width: 100%;
+  // height: 330px;
+  border: 1px lightgrey solid;
+  touch-action: none;
+}
+
+.misspelled {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: red;
+}
+
+.dragging
+{
+  z-index: 999;
+  border: 3px solid $primary-color;
+  border-radius: 15px;
+  padding-right: 8pt;
+  padding-left: 8pt;
+}
+
+.dragged
+{
+  color: $primary-color;
+  text-decoration: line-through;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+
+  border-top: 20px solid $primary-color;
+}
+
+div#mainDiv {
+  height: 87%;
+  width: 100%;
+  position: relative;
+  flex-grow: 1;
+  word-wrap: break-word;
+}
+
+.red {
+  color:red;
+}
+
+.fixated {
+  background-color: #f5d583;
+}
+
+.whitespace{
+  display: inline-block;
+  color: #212529;
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  background: none;
+}
+
+.insertWord {
+    background-color: #32CD32;
+    animation: fadeout 2s forwards;
+    animation-delay: 2s;
+    -moz-animation: fadeout 2s forwards;
+    -moz-animation-delay: 2s;
+    -webkit-animation: fadeout 2s forwards;
+    -webkit-animation-delay: 2s;
+    -o-animation: fadeout 2s forwards;
+    -o-animation-delay: 2s;
+}
+
+.deleteWord {
+    background-color: red;
+    animation: fadeout 2s forwards;
+    animation-delay: 2s;
+    -moz-animation: fadeout 2s forwards;
+    -moz-animation-delay: 2s;
+    -webkit-animation: fadeout 2s forwards;
+    -webkit-animation-delay: 2s;
+    -o-animation: fadeout 2s forwards;
+    -o-animation-delay: 2s;
+}
+
+@keyframes fadeout {
+  to {
+      background-color: #ffffff;
+  }
+
+}
+@-moz-keyframes fadeout {
+  to {
+      background-color: #ffffff;
+  }
+}
+@-webkit-keyframes fadeout {
+  to {
+      background-color: #ffffff;
+  }
+}
+@-o-keyframes fadeout {
+  to {
+      background-color: #ffffff;
+  }
+}
+
+div#mainDivTools {
+  color: gray;
+}
+
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  display: block; /* For Firefox */
+}
+
+.small-column
+{
+  -ms-flex: 0 0 50px;
+  flex: 0 0 50px;
+}
+
+.wrong {
+  color: red;
+  text-decoration: line-through;
+}
+
+.correct {
+  font-weight: bold;
+}
+
+.text-large {
+  font-size: x-large;
+}
+
+.text-huge {
+  font-size: xx-large;
+}
+

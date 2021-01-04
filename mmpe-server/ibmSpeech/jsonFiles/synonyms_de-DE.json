@@ -1,0 +1,71 @@
+{
+  "operations": {
+    "delete":["entferne","entfernen","lösche","löschen","löscher","entferner"],
+    "insert":["füge hinzu","füge ein","füge","einfügen","schreibe","schreiben","ergänze"],
+    "move":["verschiebe","verschieben","bewege","bewegen","beweger"],
+    "replace":["tausche","tauschen","ersetze","ersetzen","er_setze", "er_setzte","ändere","ändern","korrigiere", "er setze", "er setzte", "ersetzte"],
+    "confirm":["bestätigen","bestätige"],
+    "undo":["rückgängig"],
+    "redo":["wiederholen"]
+  },
+
+  "number":{
+    "1": ["ein"],
+    "2": ["zwei"],
+    "3": ["drei"],
+    "4": ["vier"],
+    "5": ["fünf"],
+    "6": ["sechs"],
+    "7": ["sieben"],
+    "8": ["acht"],
+    "9": ["neun"],
+    "10": ["zehn"]
+   }, 
+   
+  "keywords":{
+   "words":"wörter",
+   "word":"wort",
+   "sentence":["satz", "text", "texte"]
+  },
+  
+  "preposition":{
+    "before": ["davor","vor"],
+    "after": ["nach","danach","hinter"],
+    "between":["dazwischen","zwischen"],
+    "by":["mit","durch","zu"],
+    "at":["am"]
+   },
+ 
+   "conjunction": {
+     "and": ["und"]
+   },
+
+  "count": {
+  "all": "alles",
+  "end": ["ende"],
+  "last":  ["letzte", "letztes","letzter","letztem","letzten"],
+  "1": ["erste","erster","erstes","erstem"],
+  "2": ["zweites","zweite","zweiter","zweitem"],
+  "3": ["drittes","drittens","dritter","dritte"],
+  "4": ["vierte","vierter","vierten","viertes","viertel"],
+  "5": ["fünftes"],
+  "6": ["sechstes"],
+  "7": ["siebtes"],
+  "8": ["achtes"],
+  "9": ["neuntes"]
+  },
+
+  "punctuation": {
+    ",": ["komma", "comma",","],
+    ".": ["punkt"],
+    "?": ["fragezeichen"],
+    "!": ["ausrufezeichen"],
+    ";": ["semikolon"],
+    "-": ["bindestrich"],
+    ":": ["doppelpunkt"],
+    "(": ["klammer auf"],
+    ")": ["klammer zu"],
+    "\"": ["anführungszeichen"],
+    "_": ["unterstrich"]  
+  }
+}

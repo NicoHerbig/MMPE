@@ -1,0 +1,22 @@
+<h1  class="text-huge" mat-dialog-title>{{data.operation}} with {{data.modality}}</h1>
+<div mat-dialog-content>
+
+  <!--<b class="text-large">Trial:</b>
+  <p class="text-large">{{data.trial ? 'yes' : 'no'}}</p>-->
+
+  <br />
+  <b class="text-large">Source:</b>
+  <p class="text-large">{{data.source}}</p>
+
+  <br />
+  <b class="text-large">MT:</b>
+  <p class="text-large">{{data.mt}}</p>
+
+  <br />
+  <b class="text-large">Correction to apply:</b>
+  <p class="text-large" [innerHTML]="data.correction"></p>
+
+</div>
+<div mat-dialog-actions>
+  <button class="text-large btn btn-primary btn-xl mb-3 p-3" mat-button [mat-dialog-close]="data.operation" cdkFocusInitial>Start</button>
+</div>

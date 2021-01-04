@@ -1,0 +1,79 @@
+﻿<div id="segment-detail-component">
+  <div class="row m-0">
+
+    <!-- Segment ID on the left-->
+    <div class="col small-column p-0 align-self-center text-center">
+      <p>{{selectedSegment.id}}</p>
+      <!--<p>{{selectedSegment.sourceLanguage}} -> {{selectedSegment.targetLanguage}}</p>-->
+    </div>
+
+    <!-- Source text next to it-->
+    <div class="col pr-0 pl-0 pt-1 pb-1">
+      <div>
+        <p class="large position-absolute" id="sourceView" (touchstart)="onSourceViewClick($event)" (mousedown)="onSourceViewClick($event)"></p>
+      </div>
+    </div>
+
+    <!-- Buttons in th middle-->
+    <div class="col small-column p-0 d-inline-block text-center align-self-center">
+        <div class="d-inline-block text-center align-self-center">
+          <p><button class="btn btn-md btn-primary" (touchstart)="onUndo(true, $event)" (mousedown)="onUndo(true, $event)" [disabled]="!this.undoRedoService.isUndoPossible()"><i class="fa fa-undo"></i></button></p>
+          <p><button class="btn btn-md btn-primary" (touchstart)="onRedo(true, $event)" (mousedown)="onRedo(true, $event)" [disabled]="!this.undoRedoService.isRedoPossible()"><i class="fa fa-repeat"></i></button></p>
+          <p><button class="btn btn-md btn-primary" (touchstart)="confirmSegmentFromButton($event)" (mousedown)="confirmSegmentFromButton($event)"><i class="fa fa-check"></i></button></p>
+          <p><button class="btn btn-md btn-primary" id="deleteSelection" (touchstart)="deleteSelectionFromButton($event)" (mousedown)="deleteSelectionFromButton($event)" [disabled]="canDelete()"><i class="fa fa-trash"></i></button></p>
+        </div>
+    </div>
+
+    <!-- Target view on the right, consisting of tabs-->
+    <div class="col pr-0 pl-2 pt-1 pb-1">
+
+      <div #combinedView id="combinedView">
+        <!-- Tabs-->
+        <ul class="nav nav-tabs" role="tablist" *ngIf="enableHandwriting">
+          <li class="nav-item">
+            <p id="mainView" class="nav-link active bold mb-0" [ngClass]="{'active': !handwritingMode}" (touchstart)="mainView($event)" (mousedown)="mainView($event)">
+              <i class="fa fa-mouse-pointer mr-1"></i><i class="fa fa-keyboard-o mr-1"></i><i class="fa fa-microphone mr-1"></i><i class="fa fa-eye mr-1"></i>NORMAL
+            </p>
+          </li>
+          <li class="nav-item">
+            <p id="handwritingView" class="nav-link bold mb-0" [ngClass]="{'active': handwritingMode}"  (touchstart)="handwritingView($event)" (mousedown)="handwritingView($event)">
+              <i class="fa fa-pencil mr-1"></i>HANDWRITING
+            </p>
+          </li>
+        </ul>
+
+        <!-- Handwriting view-->
+        <div id='handwritingParentDiv' class="col-sm p-0" [hidden]="!handwritingMode">
+          <div #handwritingDiv id="handwritingDiv" [hidden]="!handwritingMode"></div>
+        </div>
+
+        <!-- Main editing tab-->
+        <div #mainParentDiv class="col-sm mt-0 pt-0 left" id="mainParentDiv" [hidden]="handwritingMode">
+          <!-- Tool bar on top of main div-->
+          <div id="mainDivTools">
+            <!-- Speech Transcription -->
+            <span *ngIf="enableSpeech"><i class="fa fa-microphone"></i>&nbsp;<span id="microphone">{{speechCommand}}</span></span>
+            <!-- Speech Error Feedback-->
+            <span id="warning" class="red ml-2"><i *ngIf="speechFeedback!=''" class="fa fa-warning"></i> {{speechFeedback}}</span>
+          </div>
+
+          <!-- Actual main editing view -->
+          <div #mainDiv
+               id="mainDiv"
+               class="large align-self-center d-inline-block mt-0 pt-0 mr-2"
+               contenteditable="true"
+               placeholder="Enter text here..."
+               (keyup)="mainDivInput($event); onKeyup($event)"
+               (keydown)="onKeydown($event)"
+               (drop)="onDrop($event)"
+               (input)="onInput(); mainDivChange($event)"
+          >
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+

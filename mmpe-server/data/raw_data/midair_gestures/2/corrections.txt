@@ -1,0 +1,39 @@
+
+DELETE_SINGLE#Ja, hier an der Auerfeldstraße sperrte man einst <span class="wrong">solche</span> Menschen mit Wahnvorstellungen ein.
+DELETE_SINGLE#Kleine Parzellen belegen dort heute keine Landwirte mehr - sondern <span class="wrong">nur</span> Kleingärtner der Anlage "Land in Sonne".
+DELETE_SINGLE#Auf der anderen Seite der Isar gibt die historische Karte einen Einblick in die <span class="wrong">historische</span> Geschichte der psychiatrischen Medizin.
+DELETE_GROUP#München 1856: Vier Karten, die Ihren Blick <span class="wrong">und Ihren Eindruck</span> auf die Stadt verändern
+DELETE_GROUP#Das Fischerbacher Weidezaun-Projekt ist ein Erfolgsprojekt <span class="wrong">und erfolgreich</span> und wird im kommenden Jahr fortgesetzt.
+DELETE_GROUP#Die Bomben der Alliierten rissen im Dezember 1944 viele Löcher in <span class="wrong">und um</span> die Innenstadt.
+INSERT#Die Stadt hat sich <span class="correct">in alle Richtungen</span> ausgedehnt und ist zusammengewachsen.
+INSERT#Sendling wurde 21 Jahre nach <span class="correct">Erstellung</span> der Karte als Münchner Stadtteil eingemeindet.
+INSERT#Ein Beispiel <span class="correct">dafür ist</span> Untersendling, das in der Karte von 1856 noch relativ isoliert auftaucht.
+REPLACE_SINGLE#Eine Gruftkapelle, wo nun für den S-Bahn-Tunnel gegraben <span class="wrong">sind</span><span class="correct">wird</span>.
+REPLACE_SINGLE#Besonders wenn <span class="wrong">eins</span><span class="correct">man</span> sie mit aktuellen Online-Karten vergleicht.
+REPLACE_SINGLE#Eine große Grünfläche <span class="wrong">bezieht</span><span class="correct">zeichnet</span> sich nördlich von Untersendling ab.
+REPLACE_GROUP#Der französische Heeresführer besetzte Bayern <span class="correct">seit dem Frühjahr</span><span class="wrong">im Frühling</span> 1800 während des Zweiten Koalitionskrieges mit Österreich.
+REPLACE_GROUP#Man hoffe, dass damit die Aufforstung <span class="correct">der Flächen</span><span class="wrong">das Gebiet</span> noch eine ganze Weile hinausgezogen werden könnte.
+REPLACE_GROUP#Kurfürst Max IV. Joseph trieb das Projekt weiter voran, gründete das "Topographische Bureau" - und damit <span class="wrong">der Bayerisches</span><span class="correct">die Bayerische</span> Vermessungsverwaltung.
+REORDER_SINGLE#Ab 1872 leitete Dr. Bernhard von Gudden die Einrichtung - <span class="correct">jener</span> Psychiater <span class="wrong">jener</span>, der in Zusammenhang mit dem Tod von König Ludwigs II. gebracht wird.
+REORDER_SINGLE#Der Marienplatz war um 1856 als "Haupt Platz" verzeichnet, <span class="wrong">hieß</span> die Kaufingerstraße <span class="correct">hieß</span> "Kaufinger Gasse".
+REORDER_SINGLE#Für 280 Patienten war <span class="correct">zunächst</span> Platz gewesen <span class="wrong">zunächst</span>, später wurde auf 500 Plätze erweitert.
+REORDER_GROUP#Der digitale Bayern-Atlas ist ein Flickenteppich, den man <span class="wrong">gleich erkennt</span> als solchen nicht <span class="correct">gleich erkennt</span>.
+REORDER_GROUP#Die Leute müssen bereit sein, ob es Kautionsgeld <span class="wrong">die Verwandten</span> mitbringen oder <span class="correct">die Verwandten</span> wissen lassen, dass sie durch den Staat reisen.
+REORDER_GROUP#Diese entstanden <span class="correct">nach Angaben</span> der Bayerischen Vermessungsverwaltung <span class="wrong">nach Angaben</span> zwischen 1810 und 1864 und entspringen der ersten Vermessung Bayerns.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

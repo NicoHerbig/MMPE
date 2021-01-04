@@ -1,0 +1,35 @@
+<nav class="navbar navbar-default navbar-toggleable-md bg-primary" id="custom-navbar">
+
+  <a class="navbar-brand" href="#">
+    <img height=50 src="../../../assets/images/mmpe_logo_square.png" alt="MMPE-Logo">
+  </a>
+
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="nav navbar-nav">
+      <li class="nav-item active">
+        Welcome to the MMPE Prototype
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="login">
+  <h2 class="login-header">Log-in</h2>
+  <form [formGroup]="authForm" id ="loginForm" class="login-container" (ngSubmit)="signIn()">
+    <p [ngClass]="{ 'has-error': isSubmitted && formControls.email.errors }">
+      <input type="email" id="email" placeholder="Email" formControlName="email">
+    </p>
+    <div *ngIf="isSubmitted && formControls.email.errors" class="help-block">
+      <div *ngIf="formControls.email.errors.required">Email is required</div>
+    </div>
+    <p [ngClass]="{ 'has-error': isSubmitted && formControls.password.errors }">
+      <input type="password" id="password" placeholder="Password" formControlName="password">
+    </p>
+    <div *ngIf="isSubmitted && formControls.password.errors" class="help-block">
+      <div *ngIf="formControls.password.errors.required">Password is required</div>
+    </div>
+    <div>{{notFound}}</div>
+    <p>
+      <input type="submit" value="submit">
+    </p>
+  </form>
+</div>
