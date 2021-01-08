@@ -186,16 +186,59 @@ The HTML/CSS/JS template used for this project can be found ![here](https://star
 If you want to add further UI elements, it might make sense to look in the template for nice-looking alternatives.
 
 
-## Further reading <a name="further-reading"></a>
+## Further reading & Citation<a name="further-reading"></a>
 Before getting started, we recommend to look at the following papers/blog posts. These will introduce all the features.
 
-- [A blog post on MMPE in Kirti Vashee' "eMpTy Pages"](http://kv-emptypages.blogspot.com/2020/10/the-evolving-translator-computer.html)
-- [A long version of the prototype focusing on the improvements after a study we ran](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_improving_MMPE.pdf)
-- [A demo paper at ACL, short, focusing on the prototype, but without the latest changes](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_mmpe_acl_demo.pdf)
-- [The ACL full paper, focusing on an evaluation with the prototype in the demo paper](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_mmpe_acl_full.pdf)
 - [The original elicitation study, which guided the initial design of the prototype](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_mmpe_acl_full.pdf)
+- [The ACL full paper, focusing on an evaluation with the prototype in the demo paper](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_mmpe_acl_full.pdf)
+- [A demo paper at ACL, short, focusing on the prototype, but without the latest changes](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_mmpe_acl_demo.pdf)
+- [A long version of the prototype focusing on the improvements after a study we ran](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_improving_MMPE.pdf)
+- [A blog post on MMPE in Kirti Vashee' "eMpTy Pages"](http://kv-emptypages.blogspot.com/2020/10/the-evolving-translator-computer.html)
 
 These and more publications can also be found on the [MMPE Website](https://mmpe.dfki.de)
+
+If you use this project, please cite the publication containing the aspects you refer to:
+```bibtex
+@inproceedings{herbig2019multi,
+  title={Multi-modal approaches for post-editing machine translation},
+  author={Herbig, Nico and Pal, Santanu and van Genabith, Josef and Kr{\"u}ger, Antonio},
+  booktitle={Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems},
+  pages={1--11},
+  year={2019}
+}
+
+@inproceedings{herbig-etal-2020-mmpe,
+    title = "{MMPE}: {A} {M}ulti-{M}odal {I}nterface for {P}ost-{E}diting {M}achine {T}ranslation",
+    author = {Herbig, Nico and D{\"u}wel, Tim and Pal, Santanu and Meladaki, Kalliopi and Monshizadeh, Mahsa and Kr{\"u}ger, Antonio and van Genabith, Josef},
+    booktitle = "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics",
+    year = "2020",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2020.acl-main.155",
+    doi = "10.18653/v1/2020.acl-main.155",
+    pages = "1691--1702",
+}
+
+@inproceedings{herbig-etal-2020-mmpe-multi,
+    title = "{MMPE}: {A} {M}ulti-{M}odal {I}nterface using {H}andwriting, {T}ouch {R}eordering, and {S}peech {C}ommands for {P}ost-{E}diting {M}achine {T}ranslation",
+    author = {Herbig, Nico and Pal, Santanu and D{\"u}wel, Tim and Meladaki, Kalliopi and Monshizadeh, Mahsa and Hnatovskiy, Vladislav and Kr{\"u}ger, Antonio and van Genabith, Josef},
+    booktitle = "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics: System Demonstrations",
+    year = "2020",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2020.acl-demos.37",
+    doi = "10.18653/v1/2020.acl-demos.37",
+    pages = "327--334",
+}
+
+@inproceedings{herbig-etal-2020-improving,
+    title = "Improving the Multi-Modal Post-Editing ({MMPE}) {CAT} Environment based on Professional Translators{'} Feedback",
+    author = {Herbig, Nico and Pal, Santanu and D{\"u}wel, Tim  and Shenoy, Raksha and Kr{\"u}ger, Antonio and van Genabith, Josef},
+    booktitle = "Proceedings of 1st Workshop on Post-Editing in Modern-Day Translation",
+    year = "2020",
+    publisher = "Association for Machine Translation in the Americas",
+    url = "https://www.aclweb.org/anthology/2020.amta-pemdt.7",
+    pages = "93--108",
+}
+```
 
 ## Notes regarding logging <a name="logging"></a>
 We support extensive logging functionality. On the one hand, actual keystrokes, touched pixel coordinates, and other events are logged and all UI interactions (like segmentChange or undo/redo/confirm) are stored, allowing us to analyze the translator’s use of MMPE. Most importantly, however, we also log all text manipulations on a higher level to simplify text editing analysis.
