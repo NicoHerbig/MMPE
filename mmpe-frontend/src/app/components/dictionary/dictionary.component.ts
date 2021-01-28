@@ -12,7 +12,7 @@ import * as $ from 'jquery';
 export class DictionaryComponent {
 
   private typingTimeout = null;
-  public baseUrl = 'http://localhost:3000/dictionary';
+  public baseUrl = getBaseLocation();
 
   public supportedLanguages = ['ENG', 'GER', 'FRA', 'SPA', 'CHI', 'RUS', 'JPN', 'POR', 'ITA', 'DUT', 'POL'];
   public from = 'ENG';
@@ -94,3 +94,12 @@ export class DictionaryComponent {
   }
 
 }
+export function getBaseLocation() {
+  let url = window.location.href;
+  let path = ":3000";
+  let arr = url.split("/");
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/dictionary"; 
+  return result;  
+}
+

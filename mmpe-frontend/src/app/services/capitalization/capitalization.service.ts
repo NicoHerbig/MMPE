@@ -9,7 +9,7 @@ export class CapitalizationService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  private capitalizationUrl = 'http://localhost:3000/capitalization/getNouns_de-DE';  // URL to web api
+  private capitalizationUrl = getBaseLocation();  // URL to web api
   private nouns = {};
 
   constructor(private http: HttpClient) {
@@ -41,3 +41,13 @@ export class CapitalizationService {
     return this.nouns[word.toLowerCase()];
   }
 }
+
+export function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/capitalization/getNouns_de-DE"; 
+  return result;  
+}
+

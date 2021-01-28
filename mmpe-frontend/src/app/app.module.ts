@@ -3,6 +3,7 @@ import {APP_INITIALIZER, NgModule} from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app.component';
+import { APP_BASE_HREF, Location } from '@angular/common';
 import { SegmentComponent } from './components/segment/segment.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';

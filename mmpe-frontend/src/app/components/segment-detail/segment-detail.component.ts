@@ -492,7 +492,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
   }
 
   callcommand() {
-    const baseURL = 'http://localhost:3000/ibmSpeech';
+    const baseURL = getBaseLocation();
     const getCommandsJson = baseURL + '/getCommandsJSON';
     const getSynonymJson = baseURL + '/getSynonymsJSON';
     this.speechService.command(getCommandsJson, getSynonymJson);
@@ -1075,3 +1075,12 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
     }
   }
 }
+export function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/ibmSpeech"; 
+  return result;  
+}
+

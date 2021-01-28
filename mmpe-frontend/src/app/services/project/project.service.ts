@@ -6,12 +6,13 @@ import {Project} from '../../model/project';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ProjectService {
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  private projectsUrl = 'http://localhost:3000/projects';  // URL to web api
+  private projectsUrl = getBaseLocation();  // URL to web api
 
   constructor( private http: HttpClient) { }
 
@@ -29,4 +30,13 @@ export class ProjectService {
   getAllProjectIds(): Observable<number[]> {
     return this.http.get<number[]>(this.projectsUrl);
   }
+}
+
+export function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/projects"; 
+  return result;  
 }

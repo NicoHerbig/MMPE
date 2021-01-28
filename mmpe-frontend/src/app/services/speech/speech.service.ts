@@ -18,7 +18,7 @@ import {ConfigService} from '../config/config.service';
 export class SpeechService {
 
   private static component: SegmentDetailComponent;
-  private baseURL = 'http://localhost:3000/ibmSpeech';
+  private baseURL = getBaseLocation();
   private spanID;
   private interactionType: InteractionModality = InteractionModality.SPEECH;
   private speechFlag = false;
@@ -171,7 +171,7 @@ export class SpeechService {
    */
   async executeCommand(rawCommand: string, getCommandsJson: string, getSynonymJson: string, language: string) {
     if (getSynonymJson.length === 0) {
-      const baseURL = 'http://localhost:3000/ibmSpeech';
+      const baseURL = getBaseLocation();
       getSynonymJson = baseURL + '/getSynonymsJSON_' + language;
     }
     const myRequest = new Request(getSynonymJson);
@@ -2092,4 +2092,12 @@ export class SpeechService {
     }
     return indices;
   }
+}
+export function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/ibmSpeech"; 
+  return result;  
 }

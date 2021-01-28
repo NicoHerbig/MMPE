@@ -68,9 +68,10 @@ export class LogService {
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-
-  private lowLevelURL = 'http://localhost:3000/log/lowlevel';
-  private highLevelURL = 'http://localhost:3000/log/highlevel';
+  private lowLevel = "lowlevel";
+  private highLevel = "highlevel";
+  private lowLevelURL = getBaseLocation(this.lowLevel);
+  private highLevelURL = getBaseLocation(this.highLevel);
   private generalInfo = {};
 
   private lastUndoRedo; // needed so that we can ignore high level handwriting and main logs triggered after undo/redo
@@ -1652,3 +1653,13 @@ export class LogService {
       ();
   }
 }
+
+export function getBaseLocation(URLEnding) {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/log/"+ URLEnding; 
+  return result;  
+}
+
