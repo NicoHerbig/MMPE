@@ -311,6 +311,10 @@ export class SpeechService {
       div.innerText = '';
       SpanService.initDomElement(result, mainDiv, false);
       SpeechService.updateModel();
+      let editingDiv = document.getElementById('mainDiv');
+      setTimeout(removeSpan, 2000);
+      function removeSpan() {
+      SpanService.removeEmptySpans(editingDiv);}
     }
     console.log('listening... ' + correctedCommand);
   }
@@ -2029,9 +2033,9 @@ export class SpeechService {
           result = beforeString + '<em>' + ' ' + '</em>' + inputText.substring(index + entity.length, inputText.length);
           // tslint:disable-next-line:max-line-length
         } else if (inputText.charAt(index + entity.length) === ',' || inputText.charAt(index + entity.length + 1) === '.' || inputText.charAt(index + entity.length + 1) === '%' || inputText.charAt(index + entity.length + 1) === '!' || inputText.charAt(index + entity.length + 1) === ':') {
-          result = beforeString + '<em>' + ' ' + '</em>' + inputText.substring(index + entity.length + 1, inputText.length);
+          result = beforeString + '<em>' + ' ' + '</em>' + inputText.substring(index + entity.length, inputText.length);
         } else {
-          result = beforeString + '<em>' + ' ' + '</em>' + inputText.substring(index + entity.length + 1, inputText.length);
+          result = beforeString + '<em>' + ' ' + '</em>' + inputText.substring(index + entity.length + 2, inputText.length);
         }
       } else {
         document.getElementById('warning').innerHTML = entity + ' does not exist!';
