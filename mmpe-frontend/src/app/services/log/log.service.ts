@@ -1356,7 +1356,8 @@ export class LogService {
     this.sendRequest(this.highLevelURL, payload);
   }
 
-  public logFixation(timestamp: number, duration: number, dispersion: number, x: number, y: number, wordPos: string, word: string, segmentText: string) {
+  public logFixation(timestamp: number, duration: number, dispersion: number, x: number, y: number, wordPos: string,
+                     word: string, segmentText: string) {
     const payload = {};
     payload[this.TYPE] = 'EYETRACKING_FIXATION';
     payload[this.EYETRACKER_TIMESTAMP] = timestamp;
@@ -1659,7 +1660,7 @@ export function getBaseLocation(URLEnding) {
   let arr = url.split("/");
   let path = ":3000";
   let result = arr[0] + "//" + arr[2].split(":")[0];
-  result = result + path + "/log/"+ URLEnding; 
-  return result;  
+  result = result + path + "/log/"+ URLEnding;
+  return result;
 }
 

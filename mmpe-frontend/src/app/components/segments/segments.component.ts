@@ -187,7 +187,7 @@ export class SegmentsComponent implements OnInit, AfterViewInit {
                        speechService: SpeechService, logService: LogService): void {
     const word = SegmentsComponent.fixatedElement ? SegmentsComponent.fixatedElement.textContent : '';
     const segmentText = SegmentsComponent.fixatedElement ? SegmentsComponent.fixatedElement.parentElement.textContent : '';
-    const wordPos = SegmentsComponent.fixatedElement ? 'word' + SegmentsComponent.fixatedElement.id.substr('mainDivSpan'.length) : '';
+    const wordPos = SegmentsComponent.fixatedElement ? SegmentsComponent.fixatedElement.id.substr('mainDivSpan'.length) : '';
     logService.logFixation(timestamp, duration, dispersion, x, y, wordPos, word, segmentText);
     movableElement.nativeElement.hidden = true;
     if (SegmentsComponent.fixatedElement) {

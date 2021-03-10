@@ -1,5 +1,4 @@
 import {ElementRef, Injectable} from '@angular/core';
-import * as $ from 'jquery';
 import {SpeechService} from '../speech/speech.service';
 import {LogService} from '../log/log.service';
 
@@ -52,7 +51,7 @@ export class EyetrackingService {
             const gazeJson = eyeJson.gaze;
             const ts = gazeJson.ts;
             // handle raw gaze event
-            if (gazeJson.left && gazeJson.right && gazeJson.left.gaze.valid === 1 && gazeJson.right.gaze.val === 1) {
+            if (gazeJson.left && gazeJson.right && gazeJson.left.gaze.valid === 1 && gazeJson.right.gaze.valid === 1) {
               const leftX = gazeJson.left.gaze.x;
               const leftY = gazeJson.left.gaze.y;
               const rightX = gazeJson.right.gaze.x;
@@ -112,7 +111,10 @@ export class EyetrackingService {
   public unsubscribeFromEyeTracker() {
     console.log('Telling server to unsubscribe from eye tracker');
     this.ws.send('unsubscribe');
+    this.movableElementGaze.nativeElement.hidden = true;
     this.movableElementFixation.nativeElement.hidden = true;
+    this.lastSrcFixation.nativeElement.hidden = true;
+    this.lastTgtFixation.nativeElement.hidden = true;
   }
 
   public registerEyeDataCallbacks(callbackGaze: (x: number, y: number, movableElement: ElementRef,
