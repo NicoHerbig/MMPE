@@ -1,4 +1,4 @@
-<img src="/assets/imgs/mmpe-logo.png" width="100" height="100">
+﻿![MMPE-Logo](/assets/imgs/mmpe-logo.png)
 
 # MMPE
 The shift from traditional translation to post-editing (PE) of machine-translated (MT) text can save time and reduce errors, but it also affects the design of translation interfaces, as the task changes from mainly generating text to correcting errors within otherwise helpful translation proposals. Since this paradigm shift offers potential for modalities other than mouse and keyboard, we present MMPE, the first prototype to combine traditional input modes with pen, touch, and speech modalities for PE of MT. Users can directly cross out or hand-write new text, drag and drop words for reordering, or use spoken commands to update the text in place. All text manipulations are logged in an easily interpretable format to simplify subsequent translation process research.
@@ -16,7 +16,7 @@ This project was funded in part by the German Research Foundation (DFG) under gr
 - [Troubleshooting during installation](#troubleshooting)
 - [Hardware](#hardware)
 - [Template](#template)
-- [Further reading](#further-reading)
+- [Further reading & Citation](#further-reading)
 - [Notes regarding logging](#logging)
 - [Notes regarding touch and pen functionality](#touch-and-pen)
 - [Notes regarding eye tracking functionality](#eye-tracking)
@@ -282,21 +282,31 @@ We therefore recommend deactivating it in the Cintiq settings.
 ## Notes regarding eye tracking functionality <a name="eye-tracking"></a>
 ![Eye Tracking](/assets/imgs/eyeTracking_part.png)
 
-As an eye tracker, we currently only support the Tobii 4C with Pro SDK:
+As an eye tracker, we currently support the Tobii 4C with Pro SDK and Pupil Labs eye trackers with the Pupil Core SDK:
+
+For the Tobii 4C with Pro SDK:
 - Install the Tobii Software on your PC
 - Calibrate the eye tracker for every participant
-- Activate eye tracking in the client
+- Activate the Tobii eye tracker in the front-end
 
-We are currently also working on a Pupil integration, as you can see in the frontend. Whatever you select there in the dropdown will lead to an execution of the corresponding python script on in mmpe-server/eyeTracking/python.
-This is all pretty experimental so far, but works quite good. 
+For the Pupil Labs integration:
+- Install the Pupil Capture software
+- Register your monitor as a surface in the Pupil Capture software by using fiducial markers as described on their website.
+- Calibrate the eye tracker
+- Activate the Pupil eye tracker in the front-end
 
-The TobiiProIntegration.py shows an example of how eye trackers can be integrated. Basically the script only creates two types of events:
-- Gaze events, like {'gaze': {'ts': <someTimeStamp>, 'left': {'gaze': {'x': <someXValue>, 'y': <someYValue>, 'val': <ifTheGazeIsValid>, 'pupil': {'diam': <theDiameter>, 'valid': <aValidityScore>}, 'right': {'gaze': {'x': <someXValue>, 'y': <someYValue>, 'val': <ifTheGazeIsValid>, 'pupil': {'diam': <theDiameter>, 'valid': <aValidityScore>}}}
+Selecting any eye tracker in the frontend will launch the corresponding python script on in mmpe-server/eyeTracking/python.
+Both eye tracker have not been used in studies yet, so the implementation might still contain some bugs, but we are happy to help out if you want to give it a try.
+
+For integrating another eye tracker, have a look at one of the python scripts (or test.py) in the folder mmpe-server/eyeTracking/python. They all do the same: use the eye tracker's SDK to generate our own events:
+- Gaze events, like {'gaze': {'ts': \<someTimeStamp\>, 'left': {'gaze': {'x': \<someXValue\>, 'y': \<someYValue\>, 'val': \<ifTheGazeIsValid\>, 'pupil': {'diam': \<theDiameter\>, 'valid': \<aValidityScore\>}, 'right': {'gaze': {'x': \<someXValue\>, 'y': \<someYValue\>, 'valid': \<ifTheGazeIsValid\>, 'pupil': {'diam': \<theDiameter\>, 'valid': \<aValidityScore\>}}}
     - the data is simply fetched using the Eye Tracker SDK
 - Fixation events  
-    - {'fixationStart': {'x': <centerOfFixationX>, 'y': <centerOfFixationY>, 'ts': <timestamp>}}
-    - {'fixationEnd': {'x': <centerOfFixationX>, 'y': <centerOfFixationY>, 'duration': <fixationDuration>, 'dispersion': <fixationDispersion>, 'ts': <timestamp>}}
-    - These are calculated using a simple dispersion algorithm in the file. The algorithm itself could also be moved in another file and reused by other eye trackers
+    - {'fixationStart': {'x': \<centerOfFixationX\>, 'y': \<centerOfFixationY\>, 'ts': \<timestamp\>}}
+    - {'fixationEnd': {'x': \<centerOfFixationX\>, 'y': \<centerOfFixationY\>, 'duration': \<fixationDuration\>, 'dispersion': \<fixationDispersion\>, 'ts': \<timestamp\>}}
+    - These are calculated using a simple dispersion algorithm in utils.py.
+
+If you want to integrate another eye tracker, just use its SDK and transform what it returns into the above events. Then everythign else should work automatically.
 
 These events are simply forwarded to the mmpe-frontend's eye service. 
 - gaze events are simply visualized (the orange circle in the image above)
@@ -304,7 +314,7 @@ These events are simply forwarded to the mmpe-frontend's eye service.
     - inform the speech service if a fixation happened on the currently edited target view, so that simplified multi-modal commands can be executed. In the image above, the yellow circle on the target shows the last fixation, and the yellow highlighted word the word that this fixation was mapped to.
     - memorize and visualize the last fixation on the source and target to help the translator find where s/he left off. In the image above, the yellow circle on the source is such a fixation.
 
-
+Naturally, the implementation with a python file being launched on the server requires the server to run on the same machine that you run the front-end on. For studies this is fine, so we saved ourselves some effort here. In a proper client-server architecture, you would need to move the eye tracker integration into browser plugins.
 
 ## Notes regarding speech and multi-modal functionality <a name="speech-and-multi-modal"></a>
 ![Before Speech Command](/assets/imgs/speechBefore.png)
