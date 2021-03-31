@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as $ from 'jquery';
 import { AuthService } from '../../services/auth/auth.service';
 import {LogService} from '../../services/log/log.service';
 import {ConfigService} from '../../services/config/config.service';
 import {ProjectListComponent} from '../project-list/project-list.component';
+import * as bcrypt from 'bcryptjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,9 +17,11 @@ export class LoginComponent implements OnInit {
   authForm: FormGroup;
   isSubmitted  =  false;
   notFound = '';
-
+  private httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
-              private logService: LogService, private configService: ConfigService) { }
+              private logService: LogService, private configService: ConfigService, private httpClient: HttpClient) { }
 
   ngOnInit() {
     this.authForm  =  this.formBuilder.group({
@@ -31,22 +35,30 @@ export class LoginComponent implements OnInit {
   }
 
   signIn() {
+    
+    const url = "http://localhost:3000/middleware/validate";
+    const salt = bcrypt.genSaltSync(10);
+    const password = bcrypt.hashSync(this.authForm.value.password, salt);
+    const payload = {'email':this.authForm.value.email, 'password': password, 'salt':salt};
+    
+    this.httpClient
+      .post(url, payload, this.httpOptions).subscribe(resp => {
+        
+        if (resp['authenticate'] !== false) {
+            ProjectListComponent.projectNums = resp['authenticate'];
+            this.router.navigateByUrl('/project-list');
+          } else {
+            this.router.navigateByUrl('/login');
+            this.notFound = 'Incorrect Username/ Password. Try Again';
+            $('#loginForm').trigger('reset');
+          }
+      });
+      
     this.isSubmitted = true;
     if (this.authForm.invalid) {
       return;
     }
+    
     this.authService.signIn(this.authForm.value);
-
-    if (this.configService.email_IDs.includes(this.authForm.value.email) &&
-      this.authForm.value.password ===
-      this.configService.passwords[this.configService.email_IDs.indexOf(this.authForm.value.email)]) {
-        ProjectListComponent.index = this.configService.email_IDs.indexOf(this.authForm.value.email);
-        this.router.navigateByUrl('/project-list');
-      } else {
-        this.router.navigateByUrl('/login');
-        // location.reload();
-        this.notFound = 'Incorrect Username/ Password. Try Again';
-        $('#loginForm').trigger('reset');
-      }
   }
 }

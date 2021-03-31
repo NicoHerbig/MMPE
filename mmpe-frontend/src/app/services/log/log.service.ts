@@ -59,7 +59,14 @@ export class LogService {
   private readonly LEFT = 'left';
   private readonly RIGHT = 'right';
   private readonly KEYLOG = 'keylog';
-
+  private readonly ID = 'id';
+  private readonly FEEDBACK = 'feedback';
+  public static replaceFlag = false;
+  public static replaceMultipleFlag = false;
+  public static replaceSelect = [];
+  public static deleteWord = false;
+  public static insertFlag = false;
+  
   private readonly STUDY_MODALITY = 'studyModality';
   private readonly STUDY_OPERATION = 'studyOperation';
   private readonly STUDY_CORRECTION = 'studyCorrection';
@@ -90,7 +97,7 @@ export class LogService {
     const resultWords = [];
     const resultPositions = [];
     while (j < longerString.length) {
-      if (shorterString[i] !== longerString[j] || i === shorterString.length) {
+      if (shorterString[i] !== longerString[j] && shorterString[i+1] !== longerString[j] || i === shorterString.length) {
         resultWords.push(longerString[j]);
         resultPositions.push(j);
       } else {
@@ -100,6 +107,21 @@ export class LogService {
     }
     return [resultWords, resultPositions];
   }
+
+  /**
+   * Used to log a mouse click
+   *
+   * @param segmentID - segment ID
+   * @param feedback - Feedback from the user
+   */
+   public logUserFeedback(segmentID, feedback) {
+    const payload = {};
+    
+    payload[this.TYPE] = 'USER_FEEDBACK';
+    payload[this.ID] = segmentID;
+    payload[this.FEEDBACK] = feedback;
+    this.sendRequest(this.highLevelURL, payload);
+    }
 
   // check word form changes
   /**
@@ -377,12 +399,15 @@ export class LogService {
     if (wordsOldText.length === wordsNewText.length) {
       // WORD FORM CHANGE
       const [resultWordsPrev, resultWordsNew, resultPositions] = LogService.getWordDifferences(wordsNewText, wordsOldText);
+      let finalResults = [];
       for (let i = 0; i < resultWordsPrev.length; i++) {
         if (
           this.similarity(resultWordsPrev[i], resultWordsNew[i]) > 0.5 ||
           resultWordsPrev[i].includes(resultWordsNew[i]) ||
           resultWordsNew[i].includes(resultWordsPrev[i])
         ) {
+          LogService.replaceFlag = true;	
+          finalResults.push(resultPositions[i]);
           this.logReplacePartial(
             interactionModality,
             interactionSource,
@@ -402,8 +427,11 @@ export class LogService {
             resultWordsPrev[i],
             resultWordsNew[i],
           );
+          LogService.replaceSelect=[resultPositions.length];
+          finalResults.push(resultPositions[i]);
         }
       }
+      return finalResults;
       // tslint:disable-next-line:max-line-length
     } else if (newWords.length > 0 && previousWords.length > 0 && wordsOldText.length !== wordsNewText.length + 1) {
       // SELECT TEXT AND REPLACE
@@ -416,6 +444,9 @@ export class LogService {
         '[' + previousWords.toString() + ']',
         '[' + newWords.toString() + ']',
       );
+      LogService.replaceSelect=[newWords.length];
+      LogService.replaceMultipleFlag = true;
+      return positionReplaced;
     } else if (wordsTextOld.length === wordsTextNew.length + 1) {
       // DELETE SINGLE
       console.log('Delete single');
@@ -464,12 +495,16 @@ export class LogService {
         console.log('a word was removed');
         // tslint:disable-next-line:max-line-length
         this.logDeleteSingle(interactionModality, interactionSource, segmentTextOld, segmentTextNew, delPos[0], delWords[0]);
+        LogService.deleteWord = true;	
+        return delPos[0];
       }
     } else if (wordsTextOld.length > wordsTextNew.length + 1) {
       // DELETE MULTIPLE
       console.log('Delete multiple');
       const [delWords, delPos] = LogService.getStringDifference(wordsNewText, wordsOldText);
       this.logDeleteGroup(interactionModality, interactionSource, segmentTextOld, segmentTextNew, delPos, delWords);
+      LogService.deleteWord = true;	
+      return delPos;
     } else if (wordsOldText.length + 1 === wordsNewText.length) {
       // INSERT SINGLE
       console.log('Insert single');
@@ -488,6 +523,8 @@ export class LogService {
               addPos,
             );
             this.logUnresolvedHandwritingInput(interactionModality, interactionSource, segmentTextOld, segmentTextNew);
+            LogService.insertFlag = true;
+            return addPos;
           } else {
             console.log('a space was added');
             this.logInsertSingle(interactionModality, interactionSource, segmentTextOld, segmentTextNew, addPos[0], ' ');
@@ -496,6 +533,7 @@ export class LogService {
       } else {
         // tslint:disable-next-line:max-line-length
         this.logInsertSingle(interactionModality, interactionSource, segmentTextOld, segmentTextNew, addPos[0], addWords[0]);
+        return addPos;
       }
     } else if (wordsOldText.length + 1 < wordsNewText.length) {
       // INSERT MULTIPLE
@@ -510,6 +548,7 @@ export class LogService {
           }
         }
         this.logInsertSingle(interactionModality, interactionSource, segmentTextOld, segmentTextNew, 'char' + i, char);
+        return [i];
       } else {
         console.log('Insert multiple', wordsOldText.length, wordsNewText.length, spacesNewText, spacesOldText);
         let [addWords, addPos] = LogService.getStringDifference(wordsOldText, wordsNewText);
@@ -529,7 +568,8 @@ export class LogService {
         this.logInsertSingle(interactionModality, interactionSource, segmentTextOld, segmentTextNew, addPos[0], addWords[0]);
         } else {
         this.logInsertGroup(interactionModality, interactionSource, segmentTextOld, segmentTextNew, addPos, addWords);
-        }
+        return addPos;
+      }
       }
     } /*else { // DEFAULT SHOULD NOT HAPPEN
       console.error('This case should not exist');

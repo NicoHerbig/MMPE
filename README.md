@@ -22,6 +22,7 @@ This project was funded in part by the German Research Foundation (DFG) under gr
 - [Notes regarding eye tracking functionality](#eye-tracking)
 - [Notes regarding speech and multi-modal functionality](#speech-and-multi-modal)
 - [Notes regarding mid-air gesture functionality](#mid-air-gesture)
+- [Notes regarding quality estimation functionality](#quality-estimation)
 - [Notes on deployment of the application on the remote server](#deployment)
 
 
@@ -42,10 +43,6 @@ The projects won't really work without configuration. We prepared dummy config f
 - copy the file mmpe-frontend/src/assets/config.json.example to mmpe-frontend/src/assets/config.json (copy and remove the .example)
     - for the project to run, you have to at least copy the example file
     - to see translation projects, create them in mmpe-server/data/projects. You can use project1.json.example and remove the ".example" part to get a starting point. For more information on projects, check the section here in this Readme.
-    - to log in: add emails, passwords, and projects to the corresponding arrays
-        - the email and password pairs at the same positions in the array allow you to log in
-        - the list of integers at the same position in the projects defines which projects to see. They all start with "project" followed by the specified id.
-        - be aware that the currently implemented log in mechanism is BY NO MEANS SECURE. For running internal studies this will do, but DO NOT HOST THE PROJECT AND BELIEVE IT TO BE SECURE!
     - Deactivate features: MMPE has a lot features, from which you might not need or want all. To easily deactivate those, use the variables: "enableSpeech", "enableEyeTracking", "enableWhiteSpace", "enableSpellcheck", "enableHandwriting", "enableMidairGestures"
     - to use handwriting: get a myScript application and hmac key, insert the credentials, and define the target language
     - to use speech: additionally set the "speechLanguage" and if you have custom IBM Watson model, the "speechModelCustomizationID"
@@ -53,7 +50,9 @@ The projects won't really work without configuration. We prepared dummy config f
 - copy the file mmpe-server/config.json.example to mmpe-server/config.json (copy and remove the .example)
     - if you do not want to use speech input, just copy the config example, but a file is needed for the server to run
     - if you want to use speech, create credentials on the IBM Watson website and insert them here
-
+    - to log in: add emails, passwords, and projects to the corresponding arrays
+        - the email and password pairs at the same positions in the array allow you to log in
+        - the list of integers at the same position in the projects defines which projects to see. They all start with "project" followed by the specified id.
 ## Running the repository <a name="running-the-repository"></a>
 - go into each folder separately and run 'npm install'
 - then run both projects using 'npm start' (or a run configuration in your IDE)
@@ -98,18 +97,22 @@ A translation project is simply a JSON file with the following structure:
     - "sourceLanguage" and "targetLanguage" are currently not used but could be displayed somewhere if required.
     - "segmentStatus" defines the status of the segment which is displayed as an icon between source and target. It can be Confirmed = 0, Unconfirmed = 1, or Active = 2.
 
-For certain studies, it might make sense to tell the translator what to do. We did that in the ACL study. For this, we implemented a pop-up appearing before each segment. If you want something like that, just add the following to each segment:
+For certain studies, it might make sense to tell the translator what to do or ask after each segment how it was. 
+For this, we implemented a popup before/after each segment.
+Which popup is being shown is defined in mmpe-frontend/src/app/components/segment-detail/segment-detail.component.ts, in StudyDialog's templateUrl. 
+If set to study-dialog.modality.html as in the ACL study, it shows: 
+
+![Popup](/assets/imgs/popup-modality.png)
+
+The data to populate the popup is retrieved from the project file, by adding the following to each segment:
 ```json
         "studyOperation": "REPLACE",
 		"studyTrial": true,
 		"studyCorrection": "In die große Übersichtskarte <span class=\"wrong\">wurde</span><span class=\"correct\">wurden</span> für Städte und Gemeinden detailliertere Karten, sogenannte Urpositionsblätter, eingearbeitet.",
 		"studyModality": "Pen",
 ```
-which will lead to the following popup:
 
-![Popup](/assets/imgs/popup-modality.png)
-
-The popup simply shows the "studyOperation" followed by the "studyModality" in the header, then the "source", "mt", and "correction".
+This shows the "studyOperation" followed by the "studyModality" in the header, then the "source", "mt", and "correction".
 Times between clicking the START button and confirming a segment are logged. "studyTrial" is for logging, so that you can for example exclude the data from the first few segments.
 
 To generate projects with these additional fields, latin square balancing, etc. the mmpe-server/data/projectGenerator/projectGenerator.js can be used.
@@ -364,6 +367,28 @@ The following instructions apply to Windows, but it should work similarly for ot
     ![Activate Gestures](/assets/imgs/activateMidairGesture.png)
 7. Set your sensitivty preferences in the right-hand side panel after activating mid-air gestures
     ![Gesture Sensitivity](/assets/imgs/midairGestureSensitivity.png)
+
+## Notes regarding quality estimation functionality <a name="quality-estimation"></a>
+We explored word-level quality estimation to support the post-editing process. 
+Since this project focuses on the front-end, we do not include a real QE system here, but use existing QE tools to create word-level annotations. 
+If you want to use our word-level QE visualizations, use a QE system to generate an array per sentence defining which words are probably correct/incorrect. 
+
+1) The QE annotations from the real QE model and fake QE models are stored as an array corresponding to the key "qualityLabels" in the JSON file (from 1 meaning best quality to 6 meaning worst quality). For this, we converted the QE outputs from [0,1] to 1, 2, 3, 4, 5, 6. When a user changes a word, the "qualityLabels" array at the index of the word gets value "NEUTRAL". If words are added/deleted, the "qualityLabels" array gets longer/shorter.
+    ```json
+        "qualityLabels": [1,2,3,4,2,1,4,5,3,2,1,6],
+        "colorLabels": [1,2,3,4,2,1,4,5,3,2,1,6],
+        "mode": "Binary"
+    ```
+    The value corresponding to the JSON-key "mode" indicates the visualization scheme 
+    ("Binary" or "Gradient"). The value corresponding to the JSON-key "colorLabels" has identical array elements as qualityLabels before any edits are done and is used in case the user wants to reset the edit area. Therefore, the JSON file is extended to incorporate "qualityLabels", "colorLabels" and "mode".
+2) To enable quality estimation visualization, enableQualityEstimation field in the mmpe-frontend/src/assets/config.json should be set to true.
+3) The client-side code has the logic to visualize the quality estimates from the extended JSON as either binary or gradient depending on the "mode". The extended JSON files are stored in mmpe_frontend/mmpe-server/data/projects/GeneratedProjectsQEStudy.zip
+![Prototype](/assets/imgs/Quality_Estimation.PNG)
+3) When the user post-edits the words in the segment, the changed words turn black.
+![Color Adaptation](/assets/imgs/Color_Adaptation_afterPE.PNG)
+4) In the user study studying the impact of word-level QE on PE effort, we had a pop asking the user of the word-level QE was helpful after every segment confirm.
+![Pop Up](/assets/imgs/QE_Pop-up.png). The clicked selection is stored in the log file. The shown pop-up can be found in mmpe-frontend/src/app/components/segment-detail/study-dialogQE.html. 
+   As discussed above, segment-detail.component.ts/StudyDialog defines the popup that is shown.
 
 ## Notes on deployment of the application on the remote server <a name="deployment"></a>
 For the client side code:

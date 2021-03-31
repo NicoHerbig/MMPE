@@ -24,6 +24,10 @@ export class SpanService {
   public static endInsertIndex = -1;
   public static startDeleteIndex = -1;
   public static endDeleteIndex = -1;
+  public static cursorStartPosition = -1;
+  public static startCount = 0;
+  public static flag = 0;
+  public static previousOffset;
   constructor() {}
 
   /**
@@ -260,6 +264,10 @@ export class SpanService {
     // Actual code to get start and end char in the standard case that spans exist
     if (focusedElStart && focusedElStart.tagName.toLowerCase() === 'span') {
       const caretOffset = sel.getRangeAt(0).startOffset;
+      if(caretOffset!==SpanService.previousOffset){
+        SpanService.flag = 1;
+        SpanService.previousOffset = caretOffset;
+      }
       let prevSibling: HTMLElement = focusedElStart.previousSibling as HTMLElement;
       let charCountStart = caretOffset;
       let multipleSelectionFlag = false;
@@ -274,8 +282,18 @@ export class SpanService {
           break;
         }
       }
-
+      if(SpanService.startCount === 0){
+        SpanService.cursorStartPosition = charCountStart + 1;
+        SpanService.startCount +=1;
+      }
+      else if(SpanService.flag === 1) {
+        charCountStart = SpanService.cursorStartPosition;
+        SpanService.cursorStartPosition += 1;
+        SpanService.flag = 0;
+      }
+      
       let charCountEnd = charCountStart + sel.toString().length;
+      charCountStart = charCountEnd;
       if (charCountStart === charCountEnd) {
         this.caretStore = charCountEnd;
         if (multipleSelectionFlag === true) {
@@ -382,36 +400,126 @@ export class SpanService {
    * @param domElement - the dom element the content should be inserted into
    * @param spanOnlyWords - decide if special characters and spaces should be in spans or only as normal parts of domEl
    */
-  public static initDomElement(content: string, domElement: HTMLElement, spanOnlyWords: boolean): void {
+   public static initDomElement(content: string, domElement: HTMLElement, spanOnlyWords: boolean, qualityEstimates?,mode?,position?): void {
     let iterator = 0;
+    let count = 0;
+    
+    if(position !== undefined){
+      position = parseInt(position.replace('mainDivSpan', ''));
+    }
+   
     this.clearDomElement(domElement);
-    if (content.indexOf('<mark>') !== -1) {
+    if(content.indexOf('<mark>') !== -1){
       // returns content without the tag
-      content = this.setWordIndices(content, 'mark', 'em');
+      content = this.setWordIndices(content, 'mark','em');
     }
-    if (content.indexOf('<em>') !== -1) {
+    if(content.indexOf('<em>') !== -1){
       // returns content without the tag
-      content = this.setWordIndices(content, 'em', 'mark');
+      content = this.setWordIndices(content, 'em','mark');   
     }
-    const splitContent: string[] = SpanService.tokenizeString(content);
+    const splitContent: string[] = SpanService.tokenizeString(content);//.filter(word => word !== ' ');
     for (const str of splitContent) {
-      iterator += 1;
+      let ele;
+      let setPos = false;
+      if(count === position){
+      setPos = true;
+      }
+      count+=1;
       if (!spanOnlyWords || (!SpanService.wordSeparators.includes(str) && str !== ' ' && str.charCodeAt(0) !== 160)) {
         // add a real span
         let el;
+                
+        if(qualityEstimates !==  undefined && str !== ' ' && str.charCodeAt(0) !== 160){
+          
+          if(qualityEstimates[iterator] === 1){
+            if(mode === "QE1"){
+              ele = $('<span class = ' + 'shade1' + '>' + str + '</span>');}
+            else if(mode === "QE2"){
+              ele = $('<span class = ' + 'green' + '>' + str + '</span>');
+            }
+            else{
+              ele = $('<span class = ' + 'black' + '>' + str + '</span>');
+            }
+          }
+          else if (qualityEstimates[iterator] === 2){
+            
+            if(mode === "QE1"){
+              ele = $('<span class = ' + 'shade2' + '>' + str + '</span>');}
+            else if(mode === "QE2"){
+              ele = $('<span class = ' + 'green' + '>' + str + '</span>');
+            }
+            else{
+              ele = $('<span class = ' + 'black' + '>' + str + '</span>');
+            }
+          }
+          else if (qualityEstimates[iterator] === 3){
+            
+            if(mode === "QE1"){
+              ele = $('<span class = ' + 'shade3' + '>' + str + '</span>');}
+            else if(mode === "QE2"){
+              ele = $('<span class = ' + 'green' + '>' + str + '</span>');
+            }
+            else{
+              ele = $('<span class = ' + 'black' + '>' + str + '</span>');
+            }
+          }
+          else if (qualityEstimates[iterator] === 4){
+            
+            if(mode === "QE1"){
+              ele = $('<span class = ' + 'shade4' + '>' + str + '</span>');}
+            else if(mode === "QE2"){
+              ele = $('<span class = ' + 'red' + '>' + str + '</span>');
+            }
+            else{
+              ele = $('<span class = ' + 'black' + '>' + str + '</span>');
+            }
+          }
+          else if (qualityEstimates[iterator] === 5){
+            
+            if(mode === "QE1"){
+              ele = $('<span class = ' + 'shade5' + '>' + str + '</span>');}
+            else if(mode === "QE2"){
+              ele = $('<span class = ' + 'red' + '>' + str + '</span>');
+            }
+            else{
+              ele = $('<span class = ' + 'black' + '>' + str + '</span>');
+            }
+          }
+          else if (qualityEstimates[iterator] === 6){
+            
+            if(mode === "QE1"){
+              ele = $('<span class = ' + 'shade6' + '>' + str + '</span>');}
+            else if(mode === "QE2"){
+              ele = $('<span class = ' + 'red' + '>' + str + '</span>');
+            }
+            else{
+              ele = $('<span class = ' + 'black' + '>' + str + '</span>');
+            }
+          }
+          else{
+            ele = $('<span class = ' + 'black' + '>' + str + '</span>');
+          }
+          domElement.append(ele);
+          iterator += 1;
+        }else{
         // If the token is a whitespace, add whitespace class.
-        if (iterator >= SpanService.startDeleteIndex && iterator <= SpanService.endDeleteIndex) {
+        if(iterator >= SpanService.startDeleteIndex && iterator <= SpanService.endDeleteIndex) {
           el = $('<span class = ' + 'whitespace' + '>' + str + '</span>');
-          $(el).addClass('deleteWord');
-        } else if (str === ' ' || str.charCodeAt(0) === 160) {
+          $(el).addClass("deleteWord");
+        }
+        else if (str === ' ' || str.charCodeAt(0) === 160) {
            el = $('<span class = ' + 'whitespace' + '>' + str + '</span>');
-        } else if (iterator >= SpanService.startInsertIndex && iterator <= SpanService.endInsertIndex) {
+        }
+        else if(iterator >= SpanService.startInsertIndex && iterator <= SpanService.endInsertIndex) {
           el = $('<span class = ' + 'insertWord' + '>' + str + '</span>');
-
-        } else {
+          
+        }
+        else {
           el = $('<span>' + str + '</span>');
         }
-        domElement.append(el);
+        
+        domElement.append(el);}
+        
       } else {
         // add only the str
         domElement.append(str);
@@ -423,7 +531,6 @@ export class SpanService {
     SpanService.endDeleteIndex = -1;
     SpanService.resetSpanIDs(domElement);
   }
-
   public static getCursorPosDiv(div) {
     // TODO is this function still needed? Can we also just use the cursorSelection field?
     try {

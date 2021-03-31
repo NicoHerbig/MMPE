@@ -4,5 +4,12 @@
     "password": "yourPassword",
     "iamApikey": "yourApiKey",
     "url": "https://stream-fra.watsonplatform.net/speech-to-text/api"
+  },
+   "loginCredentials": {
+    "email_IDs": ["some@email.com"],
+    "passwords": ["somePassword"]
+  },
+  "projectIDs": {
+    "projects":[[1]]
   }
 }

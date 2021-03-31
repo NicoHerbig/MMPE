@@ -11,6 +11,9 @@ module.exports = function(app) {
     app.use(dictionaryRoute);
     const logRoute = require('./log/logRoute');
     app.use(logRoute);
+    const middlewareRoute = require('./middlewares/middleware');
+    app.use(middlewareRoute.requireLogin);
+    app.use(middlewareRoute.router);
     const ibmSpeechRoute = require('./ibmSpeech/ibmSpeechRoute');
     app.use(ibmSpeechRoute);
     const eyeTrackingRoute = require('./eyeTracking/eyeTrackingRoute');

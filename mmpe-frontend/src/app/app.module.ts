@@ -9,7 +9,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SegmentsComponent } from './components/segments/segments.component';
 import { AutosizeModule } from 'ngx-autosize';
-import { SegmentDetailComponent, StudyDialogComponent } from './components/segment-detail/segment-detail.component';
+import {
+  FinalDialogComponent,
+  SegmentDetailComponent,
+  StudyDialogComponent
+} from './components/segment-detail/segment-detail.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SupportToolsComponent } from './components/support-tools/support-tools.component';
 import { HotkeyModule } from 'angular2-hotkeys';
@@ -39,7 +43,8 @@ import { ProjectListComponent } from './components/project-list/project-list.com
     DictionaryComponent,
     StudyDialogComponent,
     AuthComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    FinalDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +61,8 @@ import { ProjectListComponent } from './components/project-list/project-list.com
     MatButtonModule
   ],
   entryComponents: [
-    StudyDialogComponent
+    StudyDialogComponent,
+    FinalDialogComponent
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

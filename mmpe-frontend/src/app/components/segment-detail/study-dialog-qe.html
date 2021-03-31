@@ -1,0 +1,48 @@
+<h1  class="text-huge" mat-dialog-title>Was the word-level quality estimation helpful?</h1>
+<div mat-dialog-content>
+    <form action="" id="likert_scale">
+       <ul class='likert'>
+        <li>
+          <input type="radio" name="likert" value="very_strongly_disagree">
+          <label>Very Strongly Disagree</label>
+        </li>
+        <li>
+          <input type="radio" name="likert" value="strongly_disagree">
+          <label>Strongly Disagree</label>
+        </li>
+        <li>
+          <input type="radio" name="likert" value="disagree">
+          <label>Disagree</label>
+        </li>
+        
+          <li>
+            <input type="radio" name="likert" value="partly_disagree">
+            <label>Partly Disagree</label>
+          </li>
+          <li>
+          <input type="radio" name="likert" value="neutral">
+          <label>Neutral</label>
+        </li>
+        <li>
+          <input type="radio" name="likert" value="partly_agree">
+          <label>Partly Agree</label>
+        </li>
+        <li>
+          <input type="radio" name="likert" value="agree">
+          <label>Agree</label>
+        </li>
+        <li>
+          <input type="radio" name="likert" value="strongly_agree">
+          <label>Strongly Agree</label>
+        </li>
+        <li>
+          <input type="radio" name="likert" value="very_strongly_Agree">
+          <label>Very Strongly Agree</label>
+        </li>
+      </ul>
+    </form>
+  </div>
+<div id="dialog" title="Box"></div>
+<div mat-dialog-actions class="col text-center">
+  <button class="text-large btn btn-primary btn-xl mb-2 p-3" id="validator" mat-button (click) = onCloseConfirm($event) cdkFocusInitial>Continue</button>
+</div>

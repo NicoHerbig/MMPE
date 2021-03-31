@@ -26,6 +26,7 @@
     "@ng-bootstrap/ng-bootstrap": "^4.2.2",
     "angular-in-memory-web-api": "^0.8.0",
     "angular2-hotkeys": "^2.1.5",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^4.4.1",
     "browser": "^0.2.6",
     "core-js": "^2.6.11",

@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const fs = require("fs");
+const checkAuthMiddleware = require('../middlewares/middleware')
 
-const basePath = './data/projects/';
-
+const basePath = './data/projects/'; 
 function getFileNameForProjectId(projectId) {
     return basePath + 'project' + projectId + '.json'
 }
@@ -17,9 +17,10 @@ function getProjectIdFromFileName(filename) {
     }
 }
 
-router.route('/projects').get(
+
+router.get('/projects', checkAuthMiddleware.requireLogin,
     function(req, res) {
-        fs.readdir(basePath, (err, files) => {
+            fs.readdir(basePath, (err, files) => {
             var projects = [];
             files.forEach(file => {
                 if(file.endsWith('.json')) {
@@ -33,7 +34,7 @@ router.route('/projects').get(
         });
     });
 
-router.route('/projects/:projectid').get(
+router.get('/projects/:projectid', checkAuthMiddleware.requireLogin,
     function(req, res) {
         const filePath = getFileNameForProjectId(req.params.projectid);
         fs.readFile(filePath, function(err, data) {
@@ -48,8 +49,6 @@ router.route('/projects/:projectid').put(
         console.log('>> RECEIVED PUT at /projects/' + req.params.projectid);
 
         const filePath = getFileNameForProjectId(req.params.projectid);
-        // console.log(req.body);
-        // console.log(JSON.stringify(req.body));
         fs.writeFile(filePath, JSON.stringify(req.body), (err) => {
             if (err) {
                 console.log(err);
@@ -60,6 +59,5 @@ router.route('/projects/:projectid').put(
             }
         });
     });
-
 
 module.exports = router;

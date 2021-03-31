@@ -14,6 +14,9 @@ export class Segment {
   targetLanguage: string;
   segmentStatus: SegmentStatus;
   keylog: string;
+  qualityLabels: [];
+  colorLabels: [];
+  mode: [];
 
   // Relevant only for the study cases
   studyOperation: string;

@@ -10,7 +10,7 @@ import {ConfigService} from '../../services/config/config.service';
 })
 export class ProjectListComponent implements OnInit {
   public static index;
-
+  public static projectNums;
   selectedProjectId: number;
   projectIds: number[];
   constructor(private router: Router, private  projectService: ProjectService, private configService: ConfigService) { }
@@ -20,7 +20,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   getProjects(): void {
-    this.projectIds = this.configService.projects[ProjectListComponent.index];
+    this.projectIds = ProjectListComponent.projectNums;
     this.projectService.getAllProjectIds().subscribe(projectIds => projectIds = this.projectIds);
   }
 

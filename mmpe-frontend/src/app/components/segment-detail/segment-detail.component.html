@@ -20,7 +20,7 @@
           <p><button class="btn btn-md btn-primary" (touchstart)="onUndo(true, $event)" (mousedown)="onUndo(true, $event)" [disabled]="!this.undoRedoService.isUndoPossible()"><i class="fa fa-undo"></i></button></p>
           <p><button class="btn btn-md btn-primary" (touchstart)="onRedo(true, $event)" (mousedown)="onRedo(true, $event)" [disabled]="!this.undoRedoService.isRedoPossible()"><i class="fa fa-repeat"></i></button></p>
           <p><button class="btn btn-md btn-primary" (touchstart)="confirmSegmentFromButton($event)" (mousedown)="confirmSegmentFromButton($event)"><i class="fa fa-check"></i></button></p>
-          <p><button class="btn btn-md btn-primary" id="deleteSelection" (touchstart)="deleteSelectionFromButton($event)" (mousedown)="deleteSelectionFromButton($event)" [disabled]="canDelete()"><i class="fa fa-trash"></i></button></p>
+          <p><button *ngIf="enableTouchMode" class="btn btn-md btn-primary" id="deleteSelection" (touchstart)="deleteSelectionFromButton($event)" (mousedown)="deleteSelectionFromButton($event)" [disabled]="canDelete()"><i class="fa fa-trash"></i></button></p>
         </div>
     </div>
 

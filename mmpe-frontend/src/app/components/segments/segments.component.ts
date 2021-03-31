@@ -214,6 +214,10 @@ export class SegmentsComponent implements OnInit, AfterViewInit {
     }
     // update selected segment, mark it as active and update the mt
     this.selectedSegment = segment;
+    SegmentDetailComponent.initialColors = this.selectedSegment.qualityLabels;
+    SegmentDetailComponent.colors = this.selectedSegment.qualityLabels;
+    SegmentDetailComponent.mode = this.selectedSegment.mode; // update selected segment, mark it as active and update the mt
+    this.selectedSegment = segment;
     this.selectedSegment.segmentStatus = SegmentStatus.Active;
     this.supportTools.updateMT(this.selectedSegment.mt);
     if (this.selectedSegment !== undefined) {
@@ -245,6 +249,14 @@ export class SegmentsComponent implements OnInit, AfterViewInit {
   }
 
   confirmSegment(interactionModality: InteractionModality) {
+    if(SegmentDetailComponent.confirmFlag === false){
+        if(this.selectedSegment.id === 32){
+          this.segmentDetail.openFinalDialogIfNecessary();
+        }
+        
+      this.segmentDetail.openStudyDialogIfNecessary();//}
+    }
+    SegmentDetailComponent.confirmFlag = false;
     const duration = Date.now() - SegmentDetailComponent.segmentTimer;
     console.log('Confirmed segment with id: ' + this.selectedSegment.id);
     this.selectedSegment.segmentStatus = SegmentStatus.Confirmed;

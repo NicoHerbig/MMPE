@@ -1,5 +1,5 @@
-import { MidairGesturesService } from '../../services/midair-gestures/midair-gestures.service';
-import { ReorderService } from '../../services/reorder/reorder.service';
+import {MidairGesturesService} from '../../services/midair-gestures/midair-gestures.service';
+import {ReorderService} from '../../services/reorder/reorder.service';
 import {
   AfterViewInit,
   Component,
@@ -53,14 +53,37 @@ export interface StudyDialogData {
 
 @Component({
   selector: 'app-study-dialog',
-  templateUrl: 'study-dialog.html'
+  templateUrl: 'study-dialog-qe.html'  // choose which dialog to display here
 })
 export class StudyDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<StudyDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: StudyDialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: StudyDialogData) {
+  }
 
+  public onCloseConfirm(event) {
+    this.dialogRef.close($('input[name=likert]:checked').val());
+  }
+}
+
+export interface FinalDialogData {
+  segmentNo: string;
+}
+
+@Component({
+  selector: 'final-dialog',
+  templateUrl: 'final-dialog.html'
+})
+export class FinalDialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<FinalDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: FinalDialogData) {
+  }
+
+  public onCloseConfirm(event) {
+    this.dialogRef.close($('input[name=visualization]:checked').val());
+  }
 }
 
 @Component({
@@ -106,9 +129,18 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
   // Fields for HTML template
   public enableSpeech: boolean = this.configService.enableSpeech;
   public enableHandwriting: boolean = this.configService.enableHandwriting;
-
+  public enableTouchMode: boolean = this.configService.enableTouchMode;
   // Fields for logging
   public static segmentTimer: number;
+  public static dragStartFlag = false;
+  public static qualityEstimates;
+  public static colors;
+  public static initialColors;
+  public static segmentNumber = 1;
+  public static mode;
+  public static confirmFlag = false;
+  public static blockNumber = 0;
+
   private copyKeyboard = false;
   private pasteKeyboard = false;
   private cutKeyboard = false;
@@ -121,7 +153,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
   private clipboardContent = '';
 
   // Fields for drag and drop
-  public static dragStartFlag = false;
+
   private dragDropFlag = false;
   private oldSegmentBeforeDrop = '';
   private oldCursorPosBeforeDrop = '';
@@ -171,16 +203,16 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
 
   // To run a function when stopping typing
   private typingTimeout = null;
-
+  qualityEstimation = this.configService.enableQualityEstimation;
   @Input() selectedSegment: Segment;
   @Output() confirmSegmentEvent = new EventEmitter<InteractionModality>();
   @Output() saveSegmentEvent = new EventEmitter<string>();
   @Output() dictionaryEvent = new EventEmitter<object>();
-  @ViewChild('handwritingDiv', { read: ElementRef, static: true }) handwritingDiv: ElementRef;
+  @ViewChild('handwritingDiv', {read: ElementRef, static: true}) handwritingDiv: ElementRef;
 
   // For detecting height changes of contenteditable div
   private subscription: Subscription;
-  @ViewChild('mainDiv', { static: true }) mainDiv: ElementRef;
+  @ViewChild('mainDiv', {static: true}) mainDiv: ElementRef;
 
   private static getIndicesOf(searchStr: string, str: string, caseSensitive: boolean): any {
     str = str.replace(new RegExp(String.fromCharCode(160), 'g'), ' ');
@@ -277,7 +309,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
       }
     });
     // Set font of handwritingEditor
-    this.handwritingEditor.theme = { '.text': { 'font-size': 11, 'line-height': 1.4 } }; // should be in sync with scss file variables
+    this.handwritingEditor.theme = {'.text': {'font-size': 11, 'line-height': 1.4}}; // should be in sync with scss file variables
 
     // Import the segment's current target text
     this.importIntoHandwritingEditor(true);
@@ -295,7 +327,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
         // console.log('Smartguide clicked.');
         const candidates = $('.candidates');
         const candiWidth = '-' + candidates.width() + 'px';
-        candidates.css({ left: 'auto', right: candiWidth });
+        candidates.css({left: 'auto', right: candiWidth});
       });
     });
 
@@ -334,7 +366,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
           clearInterval(checkExist);
           console.log('MainDiv exists');
           const sourceTop: number = CoordCalcUtils.getTopDifference(this.mainDiv.nativeElement, segmentDetailComponent);
-          $('#sourceView').css({ top: sourceTop.toString() + 'px' });
+          $('#sourceView').css({top: sourceTop.toString() + 'px'});
         }
       }, 50); // check every 50ms
     } else {
@@ -348,14 +380,14 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
           console.log('HandwritingDiv exists', textInHandwritingEditor);
           const textInHandwritingBBox: DOMRect = (textInHandwritingEditor[0] as HTMLElement).getBoundingClientRect();
           const sourceTop: number = CoordCalcUtils.getTopDifferenceDOMRect(textInHandwritingBBox, segmentDetailComponent);
-          $('#sourceView').css({ top: sourceTop.toString() + 'px' });
+          $('#sourceView').css({top: sourceTop.toString() + 'px'});
         }
       }, 50); // check every 50ms
     }
   }
 
   openStudyDialogIfNecessary(): void {
-    if (this.selectedSegment.studyCorrection !== undefined) {
+    if (this.selectedSegment.studyCorrection !== undefined || this.selectedSegment.mode !== undefined) {
       console.log('opening dialog');
       // stop while pop up model is shown
       this.midairGesturesService.modelIsShown = true;
@@ -374,6 +406,22 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
         SegmentDetailComponent.segmentTimer = Date.now();
         this.midairGesturesService.modelIsShown = false;
         console.log('The dialog was closed');
+        this.logService.logUserFeedback(this.selectedSegment.id - 1, result);
+      });
+    }
+  }
+
+  public openFinalDialogIfNecessary(): void {
+    if (this.selectedSegment.mode !== undefined) {
+      const dialogRef = this.dialog.open(FinalDialogComponent, {
+        width: '1000px',
+        data: {
+          segmentNo: SegmentDetailComponent.blockNumber,
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        SegmentDetailComponent.segmentTimer = Date.now();
       });
     }
   }
@@ -433,9 +481,9 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
     }
     if (this.selectedSegment.target.trim() === '') {
       if (this.handwritingEditor !== undefined) {
-      this.handwritingEditor.clear();
-    }
-  } else {
+        this.handwritingEditor.clear();
+      }
+    } else {
       if (this.handwritingActivated) {
         this.handwritingEditor.import_(this.selectedSegment.target, 'text/plain');
       }
@@ -518,9 +566,96 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
         // To prevent spurious delete logs
         if (this.segmentChangedFlag === true) {
           this.segmentChangedFlag = false;
-          this.logService.generateHighLevelTextLog(this.oldSegmentText, this.newSegmentText, InteractionModality.KEYBOARD, InteractionSource.MAIN);
+          let position = this.logService.generateHighLevelTextLog(this.oldSegmentText, this.newSegmentText, InteractionModality.KEYBOARD, InteractionSource.MAIN);
+          if (position !== undefined) {
+            let labelColor = [];
+            //On replace partial the word edited changes to BLACK.
+            if (LogService.replaceFlag === true) {
+              LogService.replaceFlag = false;
+              for (let i = 0; i < position.length; i++) {
+                SegmentDetailComponent.colors[position[i]] = 'NEUTRAL'
+              }
+            } else if (LogService.replaceMultipleFlag === true) {
+              LogService.replaceMultipleFlag = false;
+              for (let i = 0; i < +position[0] - 1; i++) {
+                labelColor[i] = SegmentDetailComponent.colors[i];
+              }
+              for (let i = 0; i < LogService.replaceSelect[0]; i++) {
+                labelColor[+position[i] - 1] = 'NEUTRAL';
+                if (i === LogService.replaceSelect[0] - 1) {
+                  labelColor[+position[0] - 1 + i] = 'NEUTRAL';
+                }
+              }
+              let z = 0;
+              for (let j = +position[0] - 1 + position.length; j < SegmentDetailComponent.colors.length; j++) {
+                labelColor[+position[0] - 1 + LogService.replaceSelect[0] + z] = SegmentDetailComponent.colors[j];
+                z += 1;
+              }
+
+              SegmentDetailComponent.colors = labelColor;
+              LogService.replaceSelect = [];
+            } else if (LogService.replaceSelect.length > 0) {
+              for (let i = 0; i < +position[0]; i++) {
+                labelColor[i] = SegmentDetailComponent.colors[i];
+              }
+              for (let i = 0; i < LogService.replaceSelect[0]; i++) {
+                labelColor[+position[i]] = 'NEUTRAL';
+                if (i === LogService.replaceSelect[0] - 1) {
+                  labelColor[+position[0] + i] = 'NEUTRAL';
+                }
+              }
+              let z = 0;
+              for (let j = +position[0] + position.length; j < SegmentDetailComponent.colors.length; j++) {
+                labelColor[+position[0] + LogService.replaceSelect[0] + z] = SegmentDetailComponent.colors[j];
+                z += 1;
+              }
+
+              SegmentDetailComponent.colors = labelColor;
+              LogService.replaceSelect = [];
+
+            } else if (LogService.deleteWord === true) {
+              LogService.deleteWord = false;
+              // Delete group
+              if (position.length > 1) {
+                SegmentDetailComponent.colors.splice(+position[0], position.length);
+              } else { // Delete Single
+                SegmentDetailComponent.colors.splice(+position, 1);
+              }
+            } else {
+              if (position[0] !== undefined) {
+                // The first position in the insert array is taken into consideration. Till that first position, all the quality estimates are copied.
+                for (var i = 0; i < position[0]; i++) {
+                  labelColor[i] = SegmentDetailComponent.colors[i];
+                }
+                // Here i will be equal to position[0]
+                let startPosition = i;
+                // The positions where the words were inserted need to be changed to black.
+                for (let j = 0; j < position.length; j++) {
+                  labelColor[position[j]] = 'NEUTRAL';
+                }
+                // The second loop will take rest of the quality estimates from qualityEstimates array and populate it in labelColor array.
+                let count = 1;
+                if (LogService.insertFlag === true) {
+                  LogService.insertFlag = false;
+                  for (var i = startPosition + 1; i < SegmentDetailComponent.colors.length; i++) {
+                    labelColor[+position[position.length - 1] + count] = SegmentDetailComponent.colors[i];
+                    count += 1;
+                  }
+                } else {
+                  for (var i = startPosition; i < SegmentDetailComponent.colors.length; i++) {
+                    labelColor[+position[position.length - 1] + count] = SegmentDetailComponent.colors[i]
+                    count += 1;
+                  }
+                }
+                // Finally, assign the labelColor array to qualityEstimates
+                SegmentDetailComponent.colors = labelColor;
+              }
+            }
+            this.selectedSegment.qualityLabels = SegmentDetailComponent.colors;
+          }
         }
       }
+
       this.logService.logTypingFinished(this.mainDiv.nativeElement.textContent);
       this.startTypingFlag = false;
     }, 1000);
@@ -571,7 +706,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
    * @param ifExecute - Optional parameter. Set to true in ngOnChanges and MainDivReset
    */
   public updateModel(newTargetText: string, updateHandwritingEditor: boolean, updateMain: boolean,
-                     restoreCursor: boolean, ifExecute?: boolean) {
+                     restoreCursor: boolean, ifExecute?: boolean, resetFlag?) {
 
     // get text cursor info before updating the mainDiv in order to position it correctly after the update
     SpanService.storeCursorSelection();
@@ -590,8 +725,22 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
     // Update the mainDiv and respan if the new content is different from the old content.
     if (ifExecute === true || this.previousMainDivTextContent !== this.selectedSegment.target) {
       const mainDiv = $('#mainDiv');
-      SpanService.initDomElement(this.selectedSegment.target, mainDiv, false);
+      if (this.qualityEstimation) {
+        if (resetFlag === true) {
+          this.selectedSegment.qualityLabels = SegmentDetailComponent.initialColors;
+          SpanService.initDomElement(this.selectedSegment.target, mainDiv, false, this.selectedSegment.colorLabels, SegmentDetailComponent.mode);
+          console.log('Initial colors', SegmentDetailComponent.initialColors);
+          resetFlag = false;
+        } else {
+          this.selectedSegment.qualityLabels = []
+          this.selectedSegment.qualityLabels = SegmentDetailComponent.colors.slice();
+          SpanService.initDomElement(this.selectedSegment.target, mainDiv, false, this.selectedSegment.qualityLabels, SegmentDetailComponent.mode);
+        }
+      } else {
+        SpanService.initDomElement(this.selectedSegment.target, mainDiv, false);
+      }
     }
+
     // If the whiteSpace flag is set, add background style for the new content.
     if (this.whiteSpace) {
       $('.whitespace').css('background', 'radial-gradient(circle, #000000, rgba(192,192,0,0) 5px)');
@@ -646,6 +795,11 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
 
   confirmSegment(modality: InteractionModality): void {
     this.confirmSegmentEvent.emit(modality);
+    if (this.selectedSegment.id === 32) {
+      this.openFinalDialogIfNecessary();
+    }
+    this.openStudyDialogIfNecessary();//}
+    SegmentDetailComponent.confirmFlag = true;
   }
 
   // When the window size changes
@@ -714,7 +868,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
       const elementObserver = new MutationObserver(callback);
 
       // Options for the observer (which mutations to observe)
-      const config = { attributes: true, childList: true, subtree: true };
+      const config = {attributes: true, childList: true, subtree: true};
       // Start observing the target node for configured mutations
       elementObserver.observe(this.mainDiv.nativeElement, config);
     });
@@ -747,7 +901,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
     this.midairGesturesService.changeSenstivity(senstivity, type);
   }
 
-  public updateMidairGestureSpansArray(){
+  public updateMidairGestureSpansArray() {
     if (this.midairGesturesRunning) {
       this.midairGesturesService.setSpansArray();
       console.log('Updated Midair Gestures: ', this.midairGesturesRunning);
@@ -802,7 +956,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
     // Set height to sourceView height + some more space
     const mainDivHeight = $('#sourceView').css('height').toString();
     const heightForHandwriting = parseInt(mainDivHeight, 10) + 200;
-    $('#handwritingDiv').css({ height: heightForHandwriting + 'px' });
+    $('#handwritingDiv').css({height: heightForHandwriting + 'px'});
   }
 
   /**
@@ -908,10 +1062,13 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
     if (event.touches) {
       // TOUCH
       event.preventDefault();
-      this.dictionaryEvent.emit({ sourceWord: event.target.innerText, interactionModality: TouchDistinguisher.isPenOrFinger() });
+      this.dictionaryEvent.emit({
+        sourceWord: event.target.innerText,
+        interactionModality: TouchDistinguisher.isPenOrFinger()
+      });
     } else {
       // MOUSE
-      this.dictionaryEvent.emit({ sourceWord: event.target.innerText, interactionModality: InteractionModality.MOUSE });
+      this.dictionaryEvent.emit({sourceWord: event.target.innerText, interactionModality: InteractionModality.MOUSE});
     }
   }
 
@@ -919,8 +1076,9 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
    * Called if the 'reset' button is pressed.
    */
   onMainDivReset() {
-    this.updateModel(this.selectedSegment.mt, true, false, false, true);
+    this.updateModel(this.selectedSegment.mt, true, false, false, true, true);
   }
+
   mainDivChange(event) {
     SpanService.storeCursorSelection();
     // If one wants to log reordered output after dragging and dropping the word(s).
@@ -951,21 +1109,22 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
         // tslint:disable-next-line:prefer-for-of
         for (let j = 0; j < selectedWord.length; j++) {
           // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < tokens.length; i++) {
+          for (let i = 0; i < tokens.length; i++) {
             if (selectedWord[j] === tokens[i]) {
               partial = false;
             } else if (tokens[i].includes(selectedWord[j])) {
               partial = true;
             }
+          }
         }
-      }
         if (selectedWord.length === 1) {
           if (partial === true) {
             // tslint:disable-next-line:max-line-length
             this.logService.logReorderPartial(InteractionModality.KEYBOARD, InteractionSource.MAIN, this.oldSegmentBeforeDrop, this.newSegmentAfterDrop, window.getSelection().toString(), 'word' + (wordPos.length + 1).toString(), 'word' + (wordPosNew.length + 1).toString());
           } else {
-          // tslint:disable-next-line:max-line-length
-          this.logService.logReorderSingle(InteractionModality.KEYBOARD, InteractionSource.MAIN, this.oldSegmentBeforeDrop, this.newSegmentAfterDrop, window.getSelection().toString(), 'word' + (wordPos.length + 1).toString(), 'word' + (wordPosNew.length + 1).toString()); }
+            // tslint:disable-next-line:max-line-length
+            this.logService.logReorderSingle(InteractionModality.KEYBOARD, InteractionSource.MAIN, this.oldSegmentBeforeDrop, this.newSegmentAfterDrop, window.getSelection().toString(), 'word' + (wordPos.length + 1).toString(), 'word' + (wordPosNew.length + 1).toString());
+          }
           this.oldCursorPosBeforeDrop = this.newCursorPosAfterDrop;
           SpanService.storeCursorSelection();
           this.updateModel(this.newSegmentAfterDrop, true, false, false);
@@ -1075,12 +1234,13 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
     }
   }
 }
+
 export function getBaseLocation() {
   let url = window.location.href;
   let arr = url.split("/");
   let path = ":3000";
   let result = arr[0] + "//" + arr[2].split(":")[0];
-  result = result + path + "/ibmSpeech"; 
-  return result;  
+  result = result + path + "/ibmSpeech";
+  return result;
 }
 
