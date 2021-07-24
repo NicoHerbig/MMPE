@@ -21,6 +21,7 @@ export class NavbarComponent {
   @Output() whiteSpace = new EventEmitter<object>();
   @Output() eyeTracking = new EventEmitter<object>();
   @Output() midairGestures = new EventEmitter<object>();
+  @Output() IPE = new EventEmitter<object>();
   public midairGesturesRunning = false;
 
   constructor(private configService: ConfigService) { }
@@ -30,6 +31,7 @@ export class NavbarComponent {
   enableWhiteSpace: boolean = this.configService.enableWhiteSpace;
   enableSpellcheck: boolean = this.configService.enableSpellcheck;
   enableMidairGestures: boolean = this.configService.enableMidairGestures;
+  enableIPE: boolean = this.configService.enableIPE;
 
   toggleNavbar() {
     this.navbarOpen = !this.navbarOpen;
@@ -81,6 +83,19 @@ export class NavbarComponent {
         speechInput: !checkbox.prop('checked'),
         interactionModality: InteractionModality.MOUSE,
       });
+    }
+  }
+
+  onIPESwitch(event): void {
+    const checkbox = $('#IPESwitch');
+    if (event.touches) {
+      // TOUCH
+      event.preventDefault();
+      this.IPE.emit({IPEInput: !checkbox.prop('checked'), interactionModality: TouchDistinguisher.isPenOrFinger()});
+      checkbox.prop('checked', !checkbox.prop('checked'));
+    } else {
+      // MOUSE
+      this.IPE.emit({IPEInput: !checkbox.prop('checked'), interactionModality: InteractionModality.MOUSE});
     }
   }
 

@@ -57,3 +57,10 @@ Thumbs.db
 # Config files
 /mmpe-frontend/src/assets/config.json
 /mmpe-server/config.json
+
+# Big model files
+/python-backend/*.pt
+/python-backend/ende_ctranslate2-v2/model.bin
+
+# Pyc directories
+*__pycache__*

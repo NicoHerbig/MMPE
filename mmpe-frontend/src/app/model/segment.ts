@@ -14,6 +14,8 @@ export class Segment {
   targetLanguage: string;
   segmentStatus: SegmentStatus;
   keylog: string;
+
+  visualizationIPE: string;
   qualityLabels: [];
   colorLabels: [];
   mode: [];

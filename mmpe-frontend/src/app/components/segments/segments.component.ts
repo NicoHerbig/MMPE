@@ -209,6 +209,7 @@ export class SegmentsComponent implements OnInit, AfterViewInit {
   }*/
 
   onSelect(segment: Segment, event, interactionModality): void {
+    //debugger;
     if (this.dragging) {
       return;
     }
@@ -240,6 +241,7 @@ export class SegmentsComponent implements OnInit, AfterViewInit {
         } else {
           // MOUSE
           this.log.logSegmentSelection(InteractionModality.MOUSE, InteractionSource.UI);
+          //console.log("test", event.screenX)
         }
       } else {
         console.error('This call to onSelect should not happen!', event, interactionModality);
@@ -258,7 +260,7 @@ export class SegmentsComponent implements OnInit, AfterViewInit {
     }
     SegmentDetailComponent.confirmFlag = false;
     const duration = Date.now() - SegmentDetailComponent.segmentTimer;
-    console.log('Confirmed segment with id: ' + this.selectedSegment.id);
+    //console.log('Confirmed segment with id: ' + this.selectedSegment.id);
     this.selectedSegment.segmentStatus = SegmentStatus.Confirmed;
 
     let interactionSource;

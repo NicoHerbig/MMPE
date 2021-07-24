@@ -127,4 +127,11 @@ export class ConfigService {
     return this.appConfig.speechModelCustomizationID;
   }
 
+  get enableIPE() {
+    if (!this.appConfig) {
+      throw Error('Config file not loaded!');
+    }
+    return this.appConfig.enableIPE;
+  }
+  
 }

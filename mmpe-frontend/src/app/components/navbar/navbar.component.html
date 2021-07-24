@@ -9,7 +9,7 @@
   </button>
 
   <div *ngIf="project" class="custom-nav-item" id="project-description-area">
-    {{project.projectname}}
+     {{project.projectname}} 
   </div>
 
   <div class="collapse navbar-collapse" id="navbarNavDropdown" [ngClass]="{ 'show': navbarOpen }">
@@ -44,10 +44,15 @@
         <label class="nav-text" for="speechSwitch">Speech</label>
         <input type="checkbox" class="align-self-center" id="speechSwitch" (touchstart)="onSpeechSwitch($event)" (mousedown)="onSpeechSwitch($event)">
       </li>
+
+      <li class="custom-nav-item" *ngIf="enableIPE">
+        <label class="nav-text" for="IPESwitch">IPE</label>
+        <input type="checkbox" class="align-self-center" id="IPESwitch" (touchstart)="onIPESwitch($event)" (mousedown)="onIPESwitch($event)">
+      </li>
+
       <li class="custom-nav-item" *ngIf="enableMidairGestures">
         <label class="nav-text" for="midairGestures">Gestures</label>
         <input type="checkbox" class="align-self-center" id="midairGestures" (touchstart)="onMidairGesturesSwitch($event)" (mousedown)="onMidairGesturesSwitch($event)">
-
       </li>
     </ul>
   </div>

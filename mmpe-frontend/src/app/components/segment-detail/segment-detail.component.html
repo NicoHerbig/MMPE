@@ -58,20 +58,123 @@
           </div>
 
           <!-- Actual main editing view -->
-          <div #mainDiv
+          <div #mainDiv 
                id="mainDiv"
-               class="large align-self-center d-inline-block mt-0 pt-0 mr-2"
+               class="large align-self-center d-inline-block mt-0 pt-0 mr-2" 
                contenteditable="true"
                placeholder="Enter text here..."
+               (click)="selectTargetWord($event); positionOfPopUpMessage($event)" 
                (keyup)="mainDivInput($event); onKeyup($event)"
                (keydown)="onKeydown($event)"
                (drop)="onDrop($event)"
-               (input)="onInput(); mainDivChange($event)"
+               (input)="onInput(); mainDivChange($event)"  
           >
           </div>
+          <div *ngIf="enableIPE">
+          <div #mainDiv id = "tokenizeTranslation"></div><!-- Div to tokenize current translation-->
 
+          <div #mainDivLexicals id = "tokenizeLexicalHyp"></div><!-- this div is for lexicals -->
+
+          <div #mainDivLCD id = "tokenizeLCDHyp"></div><!-- for hyp sentence 'mmpe-lcd' interface-->
+
+          <div #mainDivDeepL id = "tokenizeDeepLHyp"></div><!-- This 'mainDivDeepL' is used to tokenize string for MMPE-DeepL visualization -->
+
+          <div #mainDivHyp id = "removeIdenticalHyp"></div><!-- Div to remove identical hypotheses -->
+          
+          <!--Div to display alternatives in MMPE-DeepL style -->
+          <div class="cstm-popup-div2" *ngIf = 'displayDeepLPopUp && listOfAlternatives != null' [ngStyle] = "{'left': leftX2, 'top': topY2 }">
+            <div class="cstm-inline cstm-deepl-heading">MMPE-DeepL</div>
+             <div class="cstm-deepl-list-div">
+              <ul class="cstm-deepl-ul">
+                <li class="cstm-hover-popup2 cstm-deepl-li" *ngFor = "let alter of listOfHyp" (click) = "UpdateTargetText($event, alter.translation)">
+                  <span [innerHTML]=alter.html></span>
+                </li>
+              </ul>
+            </div> 
+          </div> 
+          
+          <!--Div to display alternatives in MMPE-LMM style -->
+          <div class="cstm-popup-div" *ngIf = 'displayLMMPopUp && listOfAlternatives != null' [ngStyle] = "{'top': topY }">
+            <div class="cstm-ref-div">  
+                <span *ngFor="let ref of popUP_ref" [innerHTML] = ref.outerHTML></span>
+            </div>
+
+            <!--Display lexical changes -->
+            <div class="cstm-lexical-changes cstm-tool-tip" *ngIf = "alert_lexical">
+              <span class="tooltiptext">Lexical Changes</span> 
+              <ul class="cstm-minorChanges-ul">
+                <li class="cstm-hover cstm-minor-changes-li" *ngFor = "let lexical of array2Forlexicals" (click) = "UpdateTargetText($event, lexical.translation)">
+                 <div class="cstm-lexWords-div"> {{ lexical.lexWord }} </div>  
+                 <div class="cstm-lexStar-spanDiv" [innerHTML]=lexical.html></div>
+                </li>         
+              </ul>
+            </div> 
+
+            <!--Display minor changes -->
+            <div class="cstm-minor-changes-div cstm-tool-tip" *ngIf = "alert_minor">
+              <span class="tooltiptext">Minor Changes</span>
+              <ul class="cstm-minorChanges-ul">
+                <li class="cstm-hover cstm-minor-changes-li" *ngFor = "let list1 of minorChanges" (click) = "UpdateTargetText($event, list1.translation)">
+                  <span [innerHTML]=list1.html></span>
+                  <div><span [innerHTML]=list1.html2></span></div>
+                </li>         
+              </ul>
+            </div>
+            
+            <!--Display major changes -->
+            <div class="cstm-major-changes-div cstm-tool-tip" *ngIf = "alert_major">
+              <span class="tooltiptext">Major Changes</span>
+              <ul class="cstm-majorChanges-ul">
+                <li class="cstm-hover cstm-major-changes-li" *ngFor = "let list2 of majorChanges" (click) = "UpdateTargetText($event, list2.translation)">
+                  <span [innerHTML]=list2.html></span>
+                  <div><span [innerHTML]=list2.html3></span></div>      
+                </li> 
+              </ul>
+            </div>
+          </div> 
+
+          <!--Div to display alternatives in MMPE-LCD style -->
+          <div class="cstm-popup-div" *ngIf = 'displayLCDPopUp && listOfAlternatives != null' [ngStyle] = "{'top': topY }">
+            <div class="cstm-ref-div"> 
+              <span *ngFor="let ref of popUP_ref" [innerHTML] = ref.outerHTML></span>
+            </div>
+            <!-- Div to display lexical changes -->
+            <div class="cstm-lexical-changes cstm-tool-tip" *ngIf = "alert_lexical2">
+              <span class="tooltiptext">Lexical Changes</span>
+              <ul class="cstm-minorChanges-ul">
+                <li class="cstm-minor-changes-li" *ngFor = "let list of catg_lexical" (click) = "UpdateTargetText($event, list.fullTranslation)">
+                   <span [innerHTML]=list.newTranslation></span>  
+                  <div class="cstm-lexStar-spanDiv" [innerHTML]=list.htmlToDisplayScore></div>
+                </li>
+              </ul>
+            </div>
+
+            <!--Display consecutive changes -->
+            <div class="cstm-minor-changes-div cstm-tool-tip" *ngIf = "alert_consecutive">
+              <span class="tooltiptext">Consecutive Changes</span>
+              <ul class="cstm-minorChanges-ul">
+                <li class="cstm-hover cstm-minor-changes-li" *ngFor = "let list of catg_consecutive" (click) = "UpdateTargetText($event, list.newTranslation)">
+                  <span [innerHTML]=list.html></span>
+                  <div><span [innerHTML] = list.htmlToDisplayScore></span></div>
+                </li>
+              </ul>
+            </div> 
+            
+            <!--Display distant changes -->
+            <div class="cstm-major-changes-div cstm-tool-tip" *ngIf = "alert_distant">
+              <span class="tooltiptext">Distant Changes</span>
+              <ul class="cstm-majorChanges-ul">
+                <li class="cstm-hover cstm-major-changes-li" *ngFor = "let list of catg_distant" (click) = "UpdateTargetText($event, list.newTranslation)">
+                  <span [innerHTML] = list.html></span>
+                  <div><span [innerHTML] = list.htmlToDisplayScore></span></div>
+                </li> 
+              </ul>
+            </div>
+          </div>
+          </div><!-- end enableIPE 'div' -->          
         </div>
       </div>
+     
     </div>
   </div>
 

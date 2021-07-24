@@ -8,6 +8,7 @@
   "private": true,
   "dependencies": {
     "@types/node": "^12.12.24",
+
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",

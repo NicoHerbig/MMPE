@@ -22,4 +22,6 @@ module.exports = function(app) {
     app.use(midairGesturesRoute);
     const capitalizationRoute = require('./capitalization/capitalizationRoute');
     app.use(capitalizationRoute);
+    const translationRoute = require('./tranlation/translationRoute');
+    app.use(translationRoute);
 };

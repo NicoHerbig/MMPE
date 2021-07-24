@@ -24,18 +24,22 @@ import * as MyScriptJS from 'myscript/dist/myscript.min.js';
 import * as $ from 'jquery';
 import {SpellcheckService} from '../../services/spellcheck/spellcheck.service';
 import {SpanService} from '../../services/span/span.service';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 import {UndoRedoService} from '../../services/undo-redo/undo-redo.service';
 import {ApplicationType} from '../../model/UndoRedoState';
 import {TouchService} from '../../services/touch/touch.service';
 import {LogService} from '../../services/log/log.service';
 import {SpeechService} from '../../services/speech/speech.service';
+import {TranslationService} from '../../services/translation/translation.service';
 import {InteractionModality} from '../../model/InteractionModality';
 import {InteractionSource} from '../../model/InteractionSource';
 import {TouchDistinguisher} from '../../util/touch-distinguisher';
 import * as CoordCalcUtils from '../../util/coord-calc-utils';
 import {ConfigService} from '../../services/config/config.service';
+import * as IPEutils from '../../util/ipe-utils';
+
+//@ts-ignore
 
 class HeightAndWidth {
   height: number;
@@ -90,7 +94,8 @@ export class FinalDialogComponent {
   encapsulation: ViewEncapsulation.None,
   selector: 'app-segment-detail',
   templateUrl: './segment-detail.component.html',
-  styleUrls: ['./segment-detail.component.scss']
+  styleUrls: ['./segment-detail.component.scss', './segment-detail.component.css']
+ 
 })
 export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
@@ -128,6 +133,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
 
   // Fields for HTML template
   public enableSpeech: boolean = this.configService.enableSpeech;
+  public enableIPE: boolean = this.configService.enableIPE;
   public enableHandwriting: boolean = this.configService.enableHandwriting;
   public enableTouchMode: boolean = this.configService.enableTouchMode;
   // Fields for logging
@@ -201,6 +207,54 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
   public checkSpelling = false;
   public whiteSpace = false;
 
+  //use it to ignore punctuation in a given proposals
+  punctuationRegEx = /[!-/:-@[-`{-~�-��-��-���-�����?-??-??-???-??;?-?????-?:-??????-??-???-?%-????-??-??-??-???-?????-???-??????-??-??-?????-???-??-??-??-??-???-??-??-??-??-??-??-??-??-???-??-??-??-??-??-??-???-??-??-??-??-?\u2000-\u206e?-??-??-??-??-??-???-P?-????e?-??-??-???-??-??-??-?--??-??-??-??-??-??-???-??|-??-???-??-??-???-??-??-??-??-??-\u2e7e?-??-??-??-?\u3000-??-??�?-??-??-??-??-???-??-??-??-??-??-??-????-??-??-??-??-??-??-???-???-??-??-??-??-??-?!-/:-@[-`{-??-??-??-?]|\ud800[\udd00-\udd02\udd37-\udd3f\udd79-\udd89\udd90-\udd9b\uddd0-\uddfc\udf9f\udfd0]|\ud802[\udd1f\udd3f\ude50-\ude58]|\ud809[\udc00-\udc7e]|\ud834[\udc00-\udcf5\udd00-\udd26\udd29-\udd64\udd6a-\udd6c\udd83-\udd84\udd8c-\udda9\uddae-\udddd\ude00-\ude41\ude45\udf00-\udf56]|\ud835[\udec1\udedb\udefb\udf15\udf35\udf4f\udf6f\udf89\udfa9\udfc3]|\ud83c[\udc00-\udc2b\udc30-\udc93]/g;
+
+
+  listOfAlternatives = null;
+
+  displayDeepLPopUp : boolean = false; //popup for mmpe-deepl
+  displayLMMPopUp : boolean = false;  //popup for mmpe-lmm
+  displayLCDPopUp : boolean = false; //popup for mmpe-lcd
+  
+  //these variables are created to set the position of deepl, lmm and lcd popup
+  topY;
+  leftX;
+  topY2;
+  leftX2;
+
+  reference =  null; // refere to a current/original translation
+  referenceTextHighlighted = ""; //highlighted the current translation
+
+  minorChanges = []; //a list of minor_changes for lmm
+  majorChanges = []; //a list of major_changes for lmm
+  arrayOflexicals = []; //a list of lexicals for lmm
+  
+  changeTextColor : boolean = false; // highlighted the 'clicked word' in the current translation
+
+  alert_minor =  true; // boolean property set if the list of minor_changes is null
+  alert_major =  true; // boolean property set if the list of major_changes is null
+  alert_lexical = true; // boolean property set if the list of lexicals is null
+
+  preWordSelectEvent;  // set class property 'empty' if a new word would be clicked in the current translation 
+  currWordSelectEvent; // assign the ID of clicked word in the current translation
+
+  popUP_ref = []; // a list of words of current translation 
+  array2Forlexicals = []; // a list of lexical words
+
+  listOfHyp = []; // a list of alternatives
+  refArrayOfSpans; //tokenized current translation
+
+  alert_lexical2 =  true;  // boolean property set if the list of lexicals is null
+  alert_consecutive =  true; // boolean property set if the list of consecutive_changes is null
+  alert_distant = true; // boolean property set if the list of distant_changes is null
+
+  listForLCD = []; // concat a list of minor and major hyp for lcd
+
+  catg_lexical = []; // a list of lexicals for lcd
+  catg_consecutive = []; // a list of consecutive for lcd
+  catg_distant = []; // a list of distant for lcd
+
   // To run a function when stopping typing
   private typingTimeout = null;
   qualityEstimation = this.configService.enableQualityEstimation;
@@ -253,7 +307,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
 
   ngAfterViewInit(): void {
     this.touchService.bindEventsToElement(this.mainDiv.nativeElement);
-    console.log(this.selectedSegment.target);
+    //console.log(this.selectedSegment.target);
 
     // Add a hook for pen input on that field, because for logging we need to know when the last input happened
     // needs happen for touchmove, which is both PEN and Finger touch
@@ -267,6 +321,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
     this.speechService.callIbmSpeechClient();
     this.mainDiv.nativeElement.textContent = this.selectedSegment.target;
     const mainDiv = $('#mainDiv');
+    console.log("mainDiv", mainDiv);
     SpanService.initDomElement(this.selectedSegment.target, mainDiv, false);
     this.checkSelectedSegmentSpelling();
 
@@ -276,6 +331,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
 
     // if the text is from study mode, show dialog with correction to apply
     this.openStudyDialogIfNecessary();
+
   }
 
   setUpHandwriting(): void {
@@ -547,6 +603,8 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
   }
 
   mainDivInput(event): void {
+    console.log("event-", event)
+
     SpanService.storeCursorSelection();
 
     // Clear the timeout if it has already been set. This will prevent the previous task from executing
@@ -766,8 +824,749 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
 
     // Spell Check if enabled
     this.checkSelectedSegmentSpelling();
+  
   }
 
+  //Normalized data (return data in a given range (1, 5))
+  public map2(x, in_min, in_max, out_min, out_max) {
+  
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
+
+  //Function to select the target_prefix from the clicked word 
+  target_recursive(node) {
+
+    node = node.previousSibling;
+    if(node == null) return '';
+    let result = node.textContent;
+    while(node.previousSibling != null) {
+      node = node.previousSibling;
+      result = node.textContent + result;
+    }
+    return result;
+  }
+
+  //Fucntion to select target_postfix from the clicked word
+  target_postfix(node2) {
+
+    let clickedWord = node2.outerText;
+    node2 = node2.nextSibling;
+    if(node2 == null) return '';
+    let result = clickedWord + node2.textContent;
+    while(node2.nextSibling != null) {
+      node2 = node2.nextSibling;
+      result = result + node2.textContent;
+    }
+    return result;
+  }
+  
+  //Function call when click on any translation word
+  selectTargetWord(event) {
+
+    if(this.selectedSegment.visualizationIPE == "mmpe-DeepL") {
+      
+      console.log("we are in 'mmpe-deepl' interface");
+
+      let source = document.getElementById('sourceView').textContent;
+
+      let target_prefix = this.target_recursive(event.target);
+
+      let target_postfix = this.target_postfix(event.target);
+
+      let i, j;
+      let num_hyp = 5;
+
+      //Reference sentence e.g current translation
+      this.reference = target_prefix + target_postfix;
+      
+      //Pop-up message
+      this.displayDeepLPopUp = !this.displayDeepLPopUp;
+
+      //Split 'target_id'
+      var targetId = event.target.id;
+      var n = targetId.indexOf("Span");
+      var newTargetId = targetId.substring(n);
+
+      if(this.displayDeepLPopUp) {
+        
+        this.listOfHyp = [];
+
+        //Request for hypotheses
+        this.translationService.getTranslation(source, num_hyp, target_prefix, this.reference)
+          .then(res => {
+
+            //Make a deepcopy of numOfHypothesis
+            this.listOfAlternatives = JSON.parse(JSON.stringify(this.translationService.numOfHypothesis)); 
+
+            this.listOfHyp = JSON.parse(JSON.stringify(this.listOfAlternatives.minor_changes.concat(this.listOfAlternatives.major_changes)));
+
+            //If the given alternatives are identical then this loop will remove identical alternatives
+            for(let i = 0; i < this.listOfHyp.length; i++) {
+              
+              var mainDivHyp = $('#mainDivHyp');
+              SpanService.initDomElement(this.listOfHyp[i].translation, mainDivHyp, false);
+              
+              var elementIndex = this.listOfHyp.findIndex(x => x.translation === this.listOfHyp[i].translation);
+              console.log("index", elementIndex)
+
+              for(let j=0; j < mainDivHyp[0].childNodes.length; j++) { 
+                  
+                var str = mainDivHyp[0].childNodes[j].id;
+                var n = str.indexOf("Span");
+                var newSpanId = str.substring(n);
+                  
+                if(newTargetId == newSpanId && event.target.textContent == mainDivHyp[0].childNodes[j].innerText && elementIndex > -1) {
+                  this.listOfHyp.splice(elementIndex, 1);
+                }
+              }
+            }//End loop here
+
+            console.log("after remove the identical alternatives", this.listOfHyp)
+
+            //Update click work ID
+            var arrOfId= event.target.id.split("");
+            var newWordId = '';
+            var word= '';
+            for(let u = 0; u < arrOfId.length; u++) {
+              if(arrOfId[u] == 'S') {
+                newWordId =  event.target.id.substring(u);
+                word = event.target.innerText;
+                console.log("newWordId is :-", newWordId);
+                break;
+              } 
+            } 
+            
+            //Loop to display multiple hypotheses
+            for(let k=0; k<this.listOfHyp.length; k++) {
+              this.listOfHyp[k].html  = this.DisplayDeeplHyp(newWordId, word, this.listOfHyp[k]);
+            }
+          }); //End 'then' function here
+      } //End if-condition
+    } //End 'selectedSegment' if-condition here
+
+    /*.................................MMPE-LMM_visualization........................... */
+
+    else if(this.selectedSegment.visualizationIPE == "mmpe-LMM") {
+
+      console.log("we are in 'LMM' interface");
+
+      this.listOfHyp = [];
+      this.popUP_ref = [];
+
+      this.preWordSelectEvent = this.currWordSelectEvent
+      this.currWordSelectEvent = event.target.id
+
+      // Remove any previous id class
+      if (this.preWordSelectEvent!=null){
+        document.getElementById(this.preWordSelectEvent).className = "";
+      }
+      this.changeTextColor = !this.changeTextColor;
+      //Highlight the selected word
+      if(this.changeTextColor) {
+        event.target.className = "ClickedWord";
+      }
+      else {
+        event.target.className = " "; 
+      } 
+
+      let source = document.getElementById('sourceView').textContent;
+      let target_prefix = this.target_recursive(event.target);
+      console.log("target_prefix->:", target_prefix);
+
+      let target_postfix = this.target_postfix(event.target);
+      console.log("target_postfix->:", target_postfix);
+
+      let i, j;
+      let num_hyp = 5;
+
+      //Reference sentence e.g current translation
+      this.reference = target_prefix + target_postfix;
+      
+      //Popup message containing hypotheses
+      this.displayLMMPopUp = !this.displayLMMPopUp;
+
+      //split "targetID"
+      var targetId = event.target.id;
+      var n = targetId.indexOf("Span");
+      var newTargetId = targetId.substring(n);
+
+      if(this.displayLMMPopUp) {
+
+        this.minorChanges = [];
+        this.majorChanges = [];
+        this.arrayOflexicals = [];
+        
+        //Request for hypotheses
+        this.translationService.getTranslation(source, num_hyp, target_prefix, this.reference)
+          .then(res => {
+            //make a deepcopy of numOfHypothesis
+            this.listOfAlternatives = JSON.parse(JSON.stringify(this.translationService.numOfHypothesis)); 
+            console.log("list of alternavies:", this.listOfAlternatives);
+
+            //minor and major changes
+            this.minorChanges = JSON.parse(JSON.stringify(this.listOfAlternatives.minor_changes));
+            this.majorChanges = JSON.parse(JSON.stringify(this.listOfAlternatives.major_changes));
+            this.arrayOflexicals= this.listOfAlternatives.minor_changes.concat(this.listOfAlternatives.major_changes);
+
+            //Loop to remove identical alternatives
+            for(let i = 0; i < this.arrayOflexicals.length; i++) {
+              
+              //Tokenize string
+              var mainDivHyp = $('#mainDivHyp');
+              SpanService.initDomElement(this.arrayOflexicals[i].translation, mainDivHyp, false);
+              
+              var elementIndex = this.arrayOflexicals.findIndex(x => x.translation === this.arrayOflexicals[i].translation);
+              console.log("index", elementIndex)
+
+              for(let j=0; j < mainDivHyp[0].childNodes.length; j++) {
+                  
+                var str = mainDivHyp[0].childNodes[j].id;
+                var n = str.indexOf("Span");
+                var newSpanId = str.substring(n);
+                  
+                if(newTargetId == newSpanId && event.target.textContent == mainDivHyp[0].childNodes[j].innerText && elementIndex > -1) {
+                  this.arrayOflexicals.splice(elementIndex, 1);
+                  break;
+                }
+              }
+            } //End loop here
+
+            //Sort minor_array, major_array and lexical_array in dessending order
+            this.minorChanges = this.minorChanges.sort((a,b) => Number(b.score) - Number(a.score));    
+            this.majorChanges = this.majorChanges.sort((a,b) => Number(b.score) - Number(a.score));
+            this.arrayOflexicals = this.arrayOflexicals.sort((a,b) => Number(b.score) - Number(a.score));
+
+            //Find min and max score in "major_changes" array
+            const maxValueOfScoreMajor = Math.max(...this.majorChanges.map(o => o.score));
+            const minValueOfScoreMajor = Math.min(...this.majorChanges.map(o => o.score));
+
+            //Find min and max score in "minor_changes" array
+            const maxValueOfScoreMinor = Math.max(...this.minorChanges.map(o => o.score));
+            const minValueOfScoreMinor = Math.min(...this.minorChanges.map(o => o.score));
+
+            //Loop to remove identical hepotheses from major_changes
+            for(let i = 0; i < this.majorChanges.length; i++) {
+              
+              var mainDivHyp = $('#mainDivHyp');
+              SpanService.initDomElement(this.majorChanges[i].translation, mainDivHyp, false);
+              console.log("mainDivHyp", mainDivHyp)
+              
+              var elementIndex = this.majorChanges.findIndex(x => x.translation === this.majorChanges[i].translation);
+              for(let j=0; j < mainDivHyp[0].childNodes.length; j++) {
+
+                var str = mainDivHyp[0].childNodes[j].id;
+                var n = str.indexOf("Span");
+                var newSpanId = str.substring(n);
+                  
+                if(newTargetId == newSpanId && event.target.textContent == mainDivHyp[0].childNodes[j].innerText && elementIndex > -1) {
+                  this.majorChanges.splice(elementIndex, 1);
+                  break;
+                }
+              }
+            }//End loop here
+
+            //Loop to remove identical in minor_changes
+            for(let i = 0; i < this.minorChanges.length; i++) {
+              
+              var mainDivHyp = $('#mainDivHyp');
+              SpanService.initDomElement(this.minorChanges[i].translation, mainDivHyp, false);
+              
+              var elementIndex = this.minorChanges.findIndex(x => x.translation === this.minorChanges[i].translation);
+              console.log("index", elementIndex)
+
+              for(let j=0; j < mainDivHyp[0].childNodes.length; j++) {
+                  
+                var str = mainDivHyp[0].childNodes[j].id;
+                var n = str.indexOf("Span");
+                var newSpanId = str.substring(n);
+                  
+                if(newTargetId == newSpanId && event.target.textContent == mainDivHyp[0].childNodes[j].innerText && elementIndex > -1) {
+                  this.minorChanges.splice(elementIndex, 1);
+                  break;
+                }
+              }
+            } //End loop minor_changes here
+
+            //Loop to "normalized" the score value for rating in major_changes 
+            for(let l=0; l < this.majorChanges.length; l++) {
+
+              var myScore = this.map2 (this.majorChanges[l].score, minValueOfScoreMajor, maxValueOfScoreMajor,1,5)
+              if (minValueOfScoreMajor == maxValueOfScoreMajor) {myScore = 5}
+              myScore = Math.round(myScore)
+              var starSpan = ""
+                for (let j=0; j<myScore;j++) {
+                  starSpan += "<span class='cstm-score-class fa fa-star checked'></span>"
+                }
+                this.majorChanges[l].html3 = "<span>" + starSpan +  "</span>"
+            }
+
+            //Loop to normalized score value in minor_changes
+            for(let z=0; z < this.minorChanges.length; z++) {
+                
+              var myScore = this.map2 (this.minorChanges[z].score, minValueOfScoreMinor, maxValueOfScoreMinor,1,5)
+              if (minValueOfScoreMinor == maxValueOfScoreMinor) {myScore = 5}
+                myScore = Math.round(myScore)
+                var starSpan = ""
+                for (let j=0; j<myScore;j++) {
+                  starSpan += "<span class='cstm-score-class fa fa-star checked'></span>"
+                }
+                this.minorChanges[z].html2 = "<span>" + starSpan +  "</span>"
+            }
+
+            //Loop for highlighting minor_changes
+            if(this.minorChanges.length != 0) {
+              this.alert_minor = true;
+              for(i=0; i < this.minorChanges.length; i++) {
+                this.minorChanges[i].html = IPEutils.getNewWords(this.reference, this.minorChanges[i].translation);
+              }
+            }
+            else {
+              this.alert_minor = false;
+            }
+                        
+            //Loop to highlight major_changes
+            if(this.majorChanges.length != 0) {
+              this.alert_major = true;
+              for(j=0; j < this.majorChanges.length; j++) {
+                this.majorChanges[j].html = IPEutils.getNewWordsFromMajorChanges(this.reference, this.majorChanges[j].translation);
+              }
+            }
+            else {
+              this.alert_major = false;
+            }
+
+            //call function for lexical words
+            this.getLexicalsWords(event.target);
+
+          }); //end 'then' function here
+
+          //Call span service to show current translation on popup 
+          const tokenizeTranslation = $('#mainDiv');
+          SpanService.initDomElement(this.reference, tokenizeTranslation, false);
+
+          this.refArrayOfSpans = tokenizeTranslation;
+          console.log("mainDiv2", tokenizeTranslation);
+
+          for(let p = 0; p < tokenizeTranslation[0].childNodes.length; p++) {
+            let t = tokenizeTranslation[0].childNodes[p].id;
+            if (event.target.id == tokenizeTranslation[0].childNodes[p].id) {
+              tokenizeTranslation[0].childNodes[p].className = 'ClickedWord';
+              console.log("match id word is found",  tokenizeTranslation[0].childNodes[p].innerText)
+              this.popUP_ref.push(tokenizeTranslation[0].childNodes[p])
+            }
+            else {
+              this.popUP_ref.push(tokenizeTranslation[0].childNodes[p]);
+            }
+          }
+      }// end "display popup" condition here
+    
+    }//end "LMM" interface condition here
+
+    /*--------------------------------------MMMPE-LCD--------------------------------------------------*/
+
+    else if(this.selectedSegment.visualizationIPE == "mmpe-LCD"){
+
+      console.log("we are in 'LCD' in interface");
+
+      this.popUP_ref = [];
+
+      this.preWordSelectEvent = this.currWordSelectEvent
+      this.currWordSelectEvent = event.target.id
+
+      //Remove any previous id class
+      if (this.preWordSelectEvent!=null){
+        document.getElementById(this.preWordSelectEvent).className = "";
+      }
+
+      this.changeTextColor = !this.changeTextColor;
+      //Highlight the clicked word
+      if(this.changeTextColor) {
+        event.target.className = "ClickedWord";
+      }
+      else {
+        event.target.className = " "; 
+      } 
+      console.log("event.target", event);
+
+      let source = document.getElementById('sourceView').textContent;
+      let target_prefix = this.target_recursive(event.target);
+
+      let target_postfix = this.target_postfix(event.target);
+      console.log("target_postfix->:", target_postfix);
+
+      let i, j;
+      let num_hyp = 5;
+
+      //Original translation
+      this.reference = target_prefix + target_postfix;
+      console.log("refe:", this.reference);
+      
+      //Popup message
+      this.displayLCDPopUp = !this.displayLCDPopUp;
+
+      //Split target_ID
+      var targetId = event.target.id;
+      var n = targetId.indexOf("Span");
+      var newTargetId = targetId.substring(n);
+      
+      if(this.displayLCDPopUp) {
+
+        this.catg_consecutive = [];
+        this.catg_lexical = [];
+        this.catg_distant = [];
+
+        this.translationService.getTranslation(source, num_hyp, target_prefix, this.reference)
+          .then(res => {
+            //make a deepcopy of numOfHypothesis
+            this.listOfAlternatives = JSON.parse(JSON.stringify(this.translationService.numOfHypothesis)); 
+            console.log("list of alternavies from machine:", this.listOfAlternatives);
+            
+            /*......loop for LCD changes....*/
+            this.listForLCD = JSON.parse(JSON.stringify(this.listOfAlternatives.minor_changes.concat(this.listOfAlternatives.major_changes)));
+
+            this.listForLCD = JSON.parse(JSON.stringify(this.listOfAlternatives.minor_changes.concat(this.listOfAlternatives.major_changes)));
+
+            //loop to remove the identical hypotheses
+            for(i = 0; i < this.listForLCD.length; i++) {
+            
+              var mainDivHyp = $('#mainDivHyp');
+              SpanService.initDomElement(this.listForLCD[i].translation, mainDivHyp, false);
+              
+              var elementIndex = this.listForLCD.findIndex(x => x.translation === this.listForLCD[i].translation);
+
+              for(j=0; j < mainDivHyp[0].childNodes.length; j++) {
+                  
+                var str = mainDivHyp[0].childNodes[j].id;
+                var n = str.indexOf("Span");
+                var newSpanId = str.substring(n);
+                  
+                if(newTargetId == newSpanId && event.target.textContent == mainDivHyp[0].childNodes[j].innerText && elementIndex > -1) {
+                  this.listForLCD.splice(elementIndex, 1);
+                  i = i-1;
+                  break;
+                }
+              }
+            }
+            this.listForLCD = this.listForLCD.map(x => {
+              let new_x = {...x};
+              new_x.translation = x.translation.replace(this.punctuationRegEx, '').trim().split(' ').filter(x => x !== '').join(' ');
+              return new_x;
+            });
+
+            for(let i=0; i<this.listForLCD.length; i++) {
+              
+              let comp = IPEutils.comparison(this.reference, this.listForLCD[i].translation)//Call function to compare two strings
+              let cat = IPEutils.category(comp.comp1Array, comp.comp2Array);//Call function to catogerize into lexical, consecuitve and distant changes
+              if (cat == 1) { //if cat == 1 then it's a lexical category
+                let lexicalIndex = comp.comp1Array.findIndex(x => x != 0);
+                var lexical = {
+                  newTranslation: this.listForLCD[i].translation.split(' ')[lexicalIndex],
+                  score: this.listForLCD[i].score,
+                  fullTranslation: this.listForLCD[i].translation,
+                };
+                this.catg_lexical.push(lexical);
+              }
+              if (cat == 2) { //if cat == 2 then it's a consecutive category
+                let consect = {
+                  newTranslation: this.listForLCD[i].translation,
+                  score: this.listForLCD[i].score,
+                  html: IPEutils.highlight(this.reference, this.listForLCD[i].translation, comp, cat)//call function to highlight distant changes
+                };
+                this.catg_consecutive.push(consect);
+              }
+              if (cat == 3) { //if cat == 3 then it's a distant category
+                let distance = {
+                  newTranslation: this.listForLCD[i].translation,
+                  score: this.listForLCD[i].score,
+                  html: IPEutils.highlight(this.reference, this.listForLCD[i].translation, comp, cat)//call function to highlight distant changes
+                };
+                this.catg_distant.push(distance);
+              }
+            }
+            
+            console.log("c1-lexi", this.catg_lexical);
+            console.log("c2-cons", this.catg_consecutive)
+            console.log("c3-dis", this.catg_distant);
+
+            //when lenght is '0' then that catogary "Lexical" will not display 
+            if(this.catg_lexical.length == 0) {
+              this.alert_lexical2 = false;
+            }
+            else {
+              this.alert_lexical2 = true;          
+            }
+            if(this.catg_consecutive.length == 0) {
+              this.alert_consecutive = false;
+            }
+            else {
+              this.alert_consecutive = true;          
+            }
+            if(this.catg_distant.length == 0) {
+              this.alert_distant = false;
+            }
+            else {
+              this.alert_distant = true;          
+            }
+
+            //Make a duplicate 
+            this.catg_lexical = JSON.parse(JSON.stringify(this.catg_lexical));
+            this.catg_consecutive = JSON.parse(JSON.stringify(this.catg_consecutive));
+            this.catg_distant = JSON.parse(JSON.stringify(this.catg_distant)); 
+
+            //Sort in desending order
+            this.catg_lexical = this.catg_lexical.sort((a,b) => Number(b.score) - Number(a.score));
+            this.catg_consecutive = this.catg_consecutive.sort((a,b) => Number(b.score) - Number(a.score));
+            this.catg_distant = this.catg_distant.sort((a,b) => Number(b.score) - Number(a.score));
+
+            //Find min and max score value for lexical
+            const maxValueOfScore_lex = Math.max(...this.catg_lexical.map(o => o.score));
+            const minValueOfScore_lex = Math.min(...this.catg_lexical.map(o => o.score)); 
+
+            //Find min and max score value for consecutive 
+            const maxValueOfScore_consec = Math.max(...this.catg_consecutive.map(o => o.score));
+            const minValueOfScore_consec = Math.min(...this.catg_consecutive.map(o => o.score)); 
+
+            //Find min and max value for distant 
+            const maxValueOfScore_distant = Math.max(...this.catg_distant.map(o => o.score));
+            const minValueOfScore_distant = Math.min(...this.catg_distant.map(o => o.score));
+            
+            
+            //Loop to normalized the score value of lexicals_changes 
+            for(let n=0; n < this.catg_lexical.length; n++) {
+
+              var myScore = this.map2(this.catg_lexical[n].score, minValueOfScore_lex, maxValueOfScore_lex, 1,5)
+              if (minValueOfScore_lex == maxValueOfScore_lex) {myScore = 5}
+              myScore = Math.round(myScore)
+              var starSpan = ""
+                for (let n=0; n < myScore; n++) {
+                  starSpan += "<span class='cstm-score-class fa fa-star checked'></span>"
+                }
+                this.catg_lexical[n].htmlToDisplayScore = "<span>" + starSpan +  "</span>"
+                console.log("span for stars-lexicals", this.catg_lexical);
+            }
+            
+            //Loop to normalized the score value of consecutive_changes 
+            for(let l=0; l < this.catg_consecutive.length; l++) {
+
+              var myScore = this.map2(this.catg_consecutive[l].score, minValueOfScore_consec, maxValueOfScore_consec,1,5)
+              if (minValueOfScore_consec == maxValueOfScore_consec) {myScore = 5}
+              myScore = Math.round(myScore)
+              var starSpan = ""
+                for (let j=0; j <myScore; j++) {
+                  starSpan += "<span class='cstm-score-class fa fa-star checked'></span>"
+                }
+                this.catg_consecutive[l].htmlToDisplayScore = "<span>" + starSpan +  "</span>"
+                console.log("span for stars-consec", this.catg_consecutive);
+            } 
+
+            //Loop to normalized the score value of distant_changes 
+            for(let m=0; m < this.catg_distant.length; m++) {
+
+              var myScore = this.map2(this.catg_distant[m].score, minValueOfScore_distant, maxValueOfScore_distant, 1,5)
+              if (minValueOfScore_distant == maxValueOfScore_distant) {myScore = 5}
+              myScore = Math.round(myScore)
+              var starSpan = ""
+                for (let n=0; n < myScore; n++) {
+                  starSpan += "<span class='cstm-score-class fa fa-star checked'></span>"
+                }
+                this.catg_distant[m].htmlToDisplayScore = "<span>" + starSpan +  "</span>"
+                console.log("span for stars-distant", this.catg_distant);
+            } 
+          }); //End 'then' function here
+
+          //Call span service to show on popup orginial translation 
+          const tokenizeTranslation = $('#mainDiv');
+          SpanService.initDomElement(this.reference, tokenizeTranslation, false);
+
+          for(let p = 0; p < tokenizeTranslation[0].childNodes.length; p++) {
+            let t = tokenizeTranslation[0].childNodes[p].id;
+            if (event.target.id == tokenizeTranslation[0].childNodes[p].id) {
+              tokenizeTranslation[0].childNodes[p].className = 'ClickedWord';
+              console.log("match id word is found",  tokenizeTranslation[0].childNodes[p].innerText)
+              this.popUP_ref.push(tokenizeTranslation[0].childNodes[p])
+            }
+            else {
+              this.popUP_ref.push(tokenizeTranslation[0].childNodes[p]);
+            }
+          }
+
+      } // End 'display3 popup' here      
+    }// End elseIf-condition for MMPE-LCD here
+  } //End main "selected taget" function here
+
+
+  //Function to display lexical words in mmpe-lmm
+  getLexicalsWords(clickedWordID) {
+
+    var totalLexicals = [];
+    var newClickWordID = {
+      id: '',
+      value: ''
+    };
+
+    var newArrayOfLexicals = {
+      translation: '',
+      score: '',
+      ter: '',
+      lexWord: ''
+    }
+
+    newClickWordID.value = clickedWordID.innerText;
+    var arrOfClickWordID = clickedWordID.id.split("");
+    for(let u = 0; u < arrOfClickWordID.length; u++) {
+      if(arrOfClickWordID[u] == 'S') {
+        newClickWordID.id =  clickedWordID.id.substring(u);
+        break;
+      } 
+    }    
+
+    //Loop to tokenize the each hypothesis
+    for(let q = 0; q < JSON.parse(JSON.stringify(this.arrayOflexicals)).length; q++) {
+
+      const mainDivLexicals = $('#mainDivLexicals');
+      SpanService.initDomElement(this.arrayOflexicals[q].translation, mainDivLexicals, false);
+      for(let s=0; s < mainDivLexicals[0].childNodes.length; s++) {
+        if(mainDivLexicals[0].childNodes[s].outerText != ' ') { //if not equal whiteSpace
+
+          var arrayOfID = mainDivLexicals[0].childNodes[s].id.split("");
+      
+          for(let t = 0; t < arrayOfID.length;  t++) {
+            if(arrayOfID[t] == 'S') {
+              var newhypID = mainDivLexicals[0].childNodes[s].id.substring(t);
+              if(newhypID == newClickWordID.id) {
+                newArrayOfLexicals.lexWord = mainDivLexicals[0].childNodes[s].innerText;
+                newArrayOfLexicals.translation = this.arrayOflexicals[q].translation;
+                newArrayOfLexicals.score = this.arrayOflexicals[q].score;
+                newArrayOfLexicals.ter = this.arrayOflexicals[q].ter;
+                this.array2Forlexicals[q] = JSON.parse(JSON.stringify(newArrayOfLexicals));
+                totalLexicals[q] = mainDivLexicals[0].childNodes[s + 1].innerText;
+                break;
+              }
+              break;
+            } 
+          }
+        }
+        else {
+          var arrayOfID2 = mainDivLexicals[0].childNodes[s].id.split("");
+
+          for(let t = 0; t < arrayOfID2.length;  t++) {
+            if(arrayOfID2[t] == 'S') {
+              var newhypID2 = mainDivLexicals[0].childNodes[s].id.substring(t);
+              if(newhypID2 == newClickWordID.id) {
+                newArrayOfLexicals.lexWord = mainDivLexicals[0].childNodes[s + 1].innerText;
+                newArrayOfLexicals.translation = this.arrayOflexicals[q].translation;
+                newArrayOfLexicals.score = this.arrayOflexicals[q].score;
+                newArrayOfLexicals.ter = this.arrayOflexicals[q].ter;
+                this.array2Forlexicals[q] = JSON.parse(JSON.stringify(newArrayOfLexicals));
+                totalLexicals[q] = mainDivLexicals[0].childNodes[s +1].innerText;
+                break;
+              }
+              break;
+            } 
+          }
+        }       
+      }
+    }
+
+    //If-condition disable div if donot find lexical words
+    if(totalLexicals.length != 0) {
+      this.alert_lexical = true;
+    }
+    else {
+      this.alert_lexical = false;
+    }
+
+    //Find min and max value from lexical array
+    const maxValueOfScoreLexicals = Math.max(...this.array2Forlexicals.map(o => o.score));
+    const minValueOfScoreLexicals = Math.min(...this.array2Forlexicals.map(o => o.score));
+  
+    //Loop to normalized the score value in lexical array
+    for(let a=0; a < this.array2Forlexicals.length; a++) {
+            
+      var myScore = this.map2 (this.array2Forlexicals[a].score, minValueOfScoreLexicals, maxValueOfScoreLexicals,1,5)
+      if (minValueOfScoreLexicals == maxValueOfScoreLexicals) {myScore = 5}
+      myScore = Math.round(myScore)
+      var starSpan = "";
+        for (let b=0; b < myScore; b++) {
+          starSpan += "<span class='cstm-score-class fa fa-star checked'></span>"
+        }
+        this.array2Forlexicals[a].html = "<span'>" + starSpan +  "</span>"
+    }
+  }//End function here
+
+  //Call this function for "mmpe-deepl" visualization
+  DisplayDeeplHyp(clickId, word, alter) {
+
+    var newHypForDeepl = {
+      translation: ''
+    }
+    
+    var tempHyp = [];
+    var arrOfAlter_deepl = [];
+    var outputHTML = '';
+    
+    const mainDivDeepL = $('#mainDivDeepL');
+    SpanService.initDomElement(alter.translation, mainDivDeepL, false);
+
+    for(let s=0; s < mainDivDeepL[0].childNodes.length; s++) {
+      var tempArr = mainDivDeepL[0].childNodes[s].id.split("");
+      for(let t = 0; t < tempArr.length;  t++) { //Loop to substring the spanId
+        if(tempArr[t] == 'S') {
+          var wId = mainDivDeepL[0].childNodes[s].id.substring(t);
+          tempHyp.push({id: wId, w: mainDivDeepL[0].childNodes[s].innerText})
+          if(wId==clickId) {
+            var index = tempHyp.findIndex(x => x.id == clickId);
+            if(mainDivDeepL[0].childNodes[s].innerText != ' ') {  
+              for(let pos=0, m = 0; m < index; m++) {
+                tempHyp.splice(pos,1);              
+              } 
+            }
+            else {
+              for(let pos=0, n = 0; n <= index; n++) {
+                tempHyp.splice(pos,1);
+              } 
+            }
+          }
+          break;
+        } 
+      }   
+    }
+  
+    for(let p=0; p<tempHyp.length; p++) { //Loop to convert string in html format 
+      newHypForDeepl.translation = "<span>" + tempHyp[p].w + "</span>";
+      arrOfAlter_deepl.push(JSON.parse(JSON.stringify(newHypForDeepl))); 
+    } 
+
+    arrOfAlter_deepl.map((item) => {
+      outputHTML += item.translation + " "
+    })
+
+    return (outputHTML);
+  }
+
+
+  //Set the position of popup message
+  positionOfPopUpMessage(event) {
+  
+    this.topY = (event.clientY - 47 )+ 'px';
+    this.leftX = event.clientX + 'px';
+
+    this.topY2 = (event.clientY - 47 )+ 'px';
+    this.leftX2 = event.clientX - 705 + 'px';
+  }
+
+  //Update the current translation with the selected hypotheses
+  UpdateTargetText(event, selectedValue) {
+    
+    this.displayDeepLPopUp = false;
+    this.displayLMMPopUp = false;
+    this.displayLCDPopUp = false;
+    
+    //call this function to upate the model
+    this.updateModel(selectedValue, true, false, true);
+  } 
+
+ 
   /**
    * Updates the left panel (source view)
    * @param newText - the text that should be displayed
@@ -1080,12 +1879,14 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
   }
 
   mainDivChange(event) {
+    //console.log("mainDivChange fucntion is called ")
     SpanService.storeCursorSelection();
     // If one wants to log reordered output after dragging and dropping the word(s).
     if (this.dragDropFlag === true) {
       this.dragDropDivChangeCount += 1;
       if (this.dragDropDivChangeCount === 2) {
         this.newSegmentAfterDrop = this.mainDiv.nativeElement.textContent;
+        console.log("this.mainDiv.nativeElement.textContent", this.mainDiv.nativeElement.textContent)
         // tslint:disable-next-line:max-line-length
         const oldIndices = SegmentDetailComponent.getIndicesOf(window.getSelection().toString(), this.oldSegmentBeforeDrop, true);
         const rightOldIndex = oldIndices.indexOf(+this.oldCursorPosBeforeDrop);
@@ -1226,6 +2027,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
   }
 
   onInput() {
+    //
     if (this.firstKey) {
       // get text cursor info for initial undoRedoState
       SpanService.storeCursorSelection();

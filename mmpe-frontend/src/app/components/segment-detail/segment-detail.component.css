@@ -1,0 +1,290 @@
+/* -----------hide mainDiv.............. */
+#mainDivLexicals {
+  display: none;
+}
+#mainDivLCD {
+  display: none;
+}
+#mainDivDeepL {
+  display: none;
+}
+#mainDivHyp {
+  display: none;
+}
+
+/* -----------hide mainDiv.............. */
+
+.ClickedWord {
+  color: #F05F40;
+  font-weight: bold;
+}
+.new {
+  color: green;
+  font-weight: 900;
+}
+.del {
+  text-decoration: line-through;
+  color: red;
+}
+.shifted {
+  color: darkblue;
+}
+.normal {
+  color: #333333;
+}
+.cstm-score-class {
+  color: #ddc204;
+}
+.space {
+  background-color: green;
+}
+.consec{
+  color: green;
+}
+
+/*------------- start css here tool-tip-------------------- */
+
+ .cstm-tool-tip .tooltiptext {
+   visibility: hidden;  
+  visibility: visible;
+  width: 92px;
+  background-color: #F05F40;
+  color: #36160f;
+  text-align: center;
+  border-radius: 6px;
+  position: absolute;
+  margin-left: -94px;
+  margin-top: 0px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 0px;
+  padding-right: 0px;
+  font-size: 10px;
+  font-family: sans-serif, Arial, Calibri;
+  font-weight: 600;
+} 
+ .cstm-tool-tip:hover .tooltiptext {
+  visibility: visible;
+}  
+
+/*------------- end css here tool-tip-------------------- */
+
+.cstm-popup-div {
+    background-color: white;
+    position: absolute;
+    z-index: 1;
+    width: 96%;
+    box-shadow: 0px 2px 10px #6c757d !important;
+    padding-top: 20px;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    color: #333 !important;
+    border: 1px solid yellowgreen;
+    padding-top: 0.5px;
+    padding-left: 1px;
+    padding-right: 1px;
+    
+  }
+
+  .cstm-ref-div {
+    border-bottom: 2px solid #6C757D;
+    font-size: 13px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #444444  !important;
+    background-color: #6C757D !important;
+    position: relative;
+    width: 100%;
+    color: white;
+    font-family: sans-serif, Arial, Calibri;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    margin-bottom: 1px;
+  }
+
+  .cstm-lexical-changes {
+    border: 1px solid #6C757D;
+    border-radius: 4px;
+    overflow-y: auto;
+    max-height: 200px;
+    font-size: 12px;
+    font-family: sans-serif, Arial, Calibri;
+    color: #333333;
+    margin-left: 2px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    margin-bottom: 1px;
+  }
+  .cstm-lexWords-div {
+    display: inline-block
+  }
+  .cstm-lexStar-spanDiv {
+    float: right;
+    clear: both;
+    padding-right: 20px;
+    padding-top: 1px;
+  }
+  .cstm-minor-changes-div {
+    border: 1px solid #6C757D;
+    border-radius: 4px;
+    /* overflow-y: scroll; */
+    overflow-y: auto;
+   /*  height: 40%; */
+    max-height: 200px;
+    border-radius: 4px;
+    margin-left: 2px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+  }
+  .cstm-minorChanges-ul {
+    padding-left: 7px;
+  }
+  .cstm-minor-changes-li {
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    list-style-type: none;
+    font-size: 12px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-family: sans-serif, Arial, Calibri;
+  }
+  .cstm-minorChanges-ul li:last-child{
+    border-bottom: 1px solid transparent;
+  }
+  .cstm-major-changes-div {
+    border: 1px solid #6C757D;
+    border-radius: 4px;
+    overflow-y: auto;
+    max-height: 200px;
+    border-radius: 4px;
+    margin-left: 2px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+  }
+  .cstm-majorChanges-ul {
+    padding-left: 7px;
+  }
+  .cstm-major-changes-li {
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    list-style-type: none;
+    font-size: 12px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-family: sans-serif, Arial, Calibri;
+  }
+  .cstm-majorChanges-ul li:last-child{
+    border-bottom: 1px solid transparent;
+  }
+  .cstm-hover:hover {
+    background-color: #fee8c1 !important;
+  }
+  
+/* ...............................................css for deepl-poup.................................. */
+
+.cstm-deepl-img{
+  width: 23px;
+}
+.cstm-inline {
+  display: inline-block;
+  margin-top: 1px;
+  margin-left: 5px;
+  margin-bottom: 14px;
+}
+.cstm-deepl-heading {
+  font-weight: 600;
+  font-size: 20px;
+  color: #0F2B46;
+  margin-left: 8px;
+  font-family: 'FontAwesome';
+}
+.cstm-popup-div2 {
+  background-color: white;
+  position: absolute;
+  z-index: 1;
+  width: 35%;
+  box-shadow: 0px 2px 10px #6c757d !important;
+}
+.cstm-deepl-list-div {
+  overflow-y: auto; 
+  height: 207px;
+}
+/* hide scroll bar */
+.cstm-deepl-list-div::-webkit-scrollbar {
+  width:0px;
+}
+.cstm-deepl-list-div::-webkit-scrollbar * {
+  background:transparent;
+}
+.cstm-deepl-list-div::-webkit-scrollbar-thumb {
+  background: red !important;
+} 
+.cstm-deepl-ul {
+  padding-left: 15px;
+  margin-right: 15px;
+}
+.cstm-deepl-li {
+  cursor: pointer;
+  list-style-type: none;
+  font-size: 12px;
+  padding-top: 3px;
+  padding-bottom: 2px;
+  padding-left: 33px;
+  padding-right: 33px;
+  font-family: sans-serif, Arial, Calibri;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  line-height: 1.2;
+  text-indent: -20px;
+  
+}
+.cstm-hover-popup2:hover {
+  background-color: #FEE8C1;
+}   
+
+/* ............end.....................................................*/
+
+.cstm-li {
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+}
+
+.cstm-minor-div {
+  border: 1px solid;
+  margin-top: 28px;
+
+}
+
+.cstm-hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 2px solid #6C757D !important;
+  margin: 1em 0;
+  padding: 0;
+  max-width: 100% !important;
+}
+.cstm-list1{
+cursor: pointer;
+border-bottom: 1px solid rgba(0,0,0,.1);
+margin-bottom: 13px;
+list-style-type: none;
+}
+.cstm-list1:hover {
+background-color: #fee8c1 !important;
+}
+.cstm-list2 {
+cursor: pointer;
+border-bottom: 1px solid rgba(0,0,0,.1);
+margin-bottom: 13px;
+list-style-type: none;
+}
+.cstm-list2:hover {
+background-color: #fee8c1 !important;
+}
+.cstm-majorChanges-list li:last-child {
+border-bottom: 1px solid transparent;
+}
