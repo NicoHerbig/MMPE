@@ -214,6 +214,7 @@ Before getting started, we recommend to look at the following papers/blog posts.
 - [A demo paper at ACL, short, focusing on the prototype, but without the latest changes](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_mmpe_acl_demo.pdf)
 - [A long version of the prototype focusing on the improvements after a study we ran](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_improving_MMPE.pdf)
 - [A blog post on MMPE in Kirti Vashee' "eMpTy Pages"](http://kv-emptypages.blogspot.com/2020/10/the-evolving-translator-computer.html)
+- [The ACL paper on mid-air hand gestures for PE MT](https://umtl.cs.uni-saarland.de/paper_preprints/paper_jamara_gesture_pe.pdf)
 
 These and more publications can also be found on the [MMPE Website](https://mmpe.dfki.de)
 
@@ -257,6 +258,17 @@ If you use this project, please cite the publication containing the aspects you 
     publisher = "Association for Machine Translation in the Americas",
     url = "https://www.aclweb.org/anthology/2020.amta-pemdt.7",
     pages = "93--108",
+}
+
+@inproceedings{albo-jamara-etal-2021-mid,
+    title = "Mid-Air Hand Gestures for Post-Editing of Machine Translation",
+    author = {Albo Jamara, Rashad  and Herbig, Nico and Kr{\"u}ger, Antonio and van Genabith, Josef},
+    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)",
+    year = "2021",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.acl-long.527",
+    doi = "10.18653/v1/2021.acl-long.527",
+    pages = "6763--6773",
 }
 ```
 
@@ -366,6 +378,7 @@ Here is quick description of the synonym_de-DE.json file, which can help create 
 The synonym_de-DE.json file assists in mapping target language (German) speech commands to its corresponding commands in commands.json, which are then processed to obtain the final result. This JSON file should be rather intuitive: it supports various operations like delete, insert, move, replace, confirm, undo and redo. Each of these operations are mapped to multiple words in the target language. Similarly, there are number and keyword mappings to support multimodal commands like "Lösche zwei wörter.", "ersetze vier wörter durch Kunden." and "Bewege vier wörter nach Kunden.". Furthermore, keyword and count mappings are included to support commands like "Lösche erstes Wort", "Lösche fünftes Wort am Ende", "er setze satz durch vinyl". Additionally, preposition, conjunction and punctuation mappings are also included. In order to support other language pairs, a new synonyms.json file needs to be provided with the source-target mappings. Also note how this file can be easily used to fix transcription errors: in German, we frequently received "er setze" instead of "ersetze" from Watson, but supporting this is as simple as adding it to the list of German words for the "replace" operation.
 
 ## Notes regarding mid-air gesture functionality <a name="mid-air-gesture"></a>
+Note: This feature is based on the Master’s thesis “Using Hand Gestures for Text Editing Tasks in Post-Editing of Machine Translation” by Rashad Albo Jamara, and the corresponding ACL 2021 paper "Mid-Air Hand Gestures for Post-Editing of Machine Translation".
 
 Leap Motion Controller enables you to use mid-air gestures with the minimum requirements. The following steps will guide you to install and use it.
 
