@@ -18,7 +18,7 @@ import {ConfigService} from '../config/config.service';
 export class SpeechService {
 
   private static component: SegmentDetailComponent;
-  private baseURL = getBaseLocation();
+  private baseURL = getSpeechBaseLocation();
   private spanID;
   private interactionType: InteractionModality = InteractionModality.SPEECH;
   private speechFlag = false;
@@ -118,7 +118,7 @@ export class SpeechService {
    * @param language : Target language
    */
   async runSpeech(getCommandsJson: string, getSynonymJson: string, language: string) {
-    await fetch('http://localhost:3002/api/speech-to-text/token').then((response) => {
+    await fetch(getTokenBaseLocation()).then((response) => {
       return response.json();
     }).then((token) => {
       console.log('token is', token);
@@ -171,8 +171,7 @@ export class SpeechService {
    */
   async executeCommand(rawCommand: string, getCommandsJson: string, getSynonymJson: string, language: string) {
     if (getSynonymJson.length === 0) {
-      const baseURL = getBaseLocation();
-      getSynonymJson = baseURL + '/getSynonymsJSON_' + language;
+      getSynonymJson = this.baseURL + '/getSynonymsJSON_' + language;
     }
     const myRequest = new Request(getSynonymJson);
     const data = await fetch(myRequest).then((resp) => {
@@ -2097,11 +2096,21 @@ export class SpeechService {
     return indices;
   }
 }
-export function getBaseLocation() {
+function getSpeechBaseLocation() {
   let url = window.location.href;
   let arr = url.split("/");
   let path = ":3000";
   let result = arr[0] + "//" + arr[2].split(":")[0];
   result = result + path + "/ibmSpeech"; 
+  return result;  
+}
+
+
+function getTokenBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3002";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/api/speech-to-text/token"; 
   return result;  
 }

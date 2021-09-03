@@ -19,8 +19,7 @@ export class TranslationService {
 
   public numOfHypothesis = null;
 
-
-  private translationUrl = 'http://localhost:3000/alternatives';  // URL to web api
+  private translationUrl = getBaseLocation();  // URL to web api
 
   constructor( private http: HttpClient) { }
   getTranslation(source, num_hyp, target_prefix, reference) {
@@ -40,4 +39,13 @@ export class TranslationService {
     }); 
   }
 
+}
+
+function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/alternatives"; 
+  return result;  
 }

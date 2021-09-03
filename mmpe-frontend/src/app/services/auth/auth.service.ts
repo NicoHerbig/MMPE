@@ -31,7 +31,7 @@ export class AuthService {
       const password = token.substr(token.indexOf(' ') + 1, token.length);
       const salt = bcrypt.genSaltSync(10);
       const passwordHash = bcrypt.hashSync(password, salt);
-      const url = "http://localhost:3000/getMyData/validate";
+      const url = getBaseLocation();
       const payload = {'email':email, 'password': passwordHash, 'salt': salt};
       this.httpClient
       .post(url, payload, this.httpOptions).subscribe(resp => {
@@ -47,4 +47,14 @@ export class AuthService {
     return true;
  }
 }
+}
+
+
+function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/getMyData/validate";
+  return result;
 }

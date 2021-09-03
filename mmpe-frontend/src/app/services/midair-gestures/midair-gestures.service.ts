@@ -14,7 +14,7 @@ import { InteractionSource } from '../../model/InteractionSource';
 })
 export class MidairGesturesService implements OnInit {
   constructor(private logService: LogService, private spanService: SpanService, private reorderService: ReorderService) {
-    this.webSocket = new WebSocket('ws://localhost:3000/midairGestures/getData');
+    this.webSocket = new WebSocket(getBaseLocation());
     this.webSocket.onopen = () => {
       console.log('Connected to Leap Motion Controller on server via websocket');
     };
@@ -605,4 +605,19 @@ export class MidairGesturesService implements OnInit {
     }
     return charCounter;
   }
+}
+
+function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let protocol: string;
+  if (arr[0] == "https:") {
+    protocol = "wss:";
+  } else {
+    protocol = "ws:";
+  }
+  let result = protocol + "//" + arr[2].split(":")[0];
+  result = result + path + "/midairGestures/getData";
+  return result;
 }

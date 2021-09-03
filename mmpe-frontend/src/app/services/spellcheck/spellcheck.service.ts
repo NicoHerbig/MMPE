@@ -4,22 +4,21 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import * as $ from 'jquery';
 
-enum SpellcheckAPI {
-  OWN = 'http://localhost:3000/spelling',
-  MS_AZURE = 'api.cognitive.microsoft.com/bing/v7.0/spellcheck'
-}
+const spellcheckAPI = Object.create(null);
+spellcheckAPI.OWN = getBaseLocation();
+spellcheckAPI.MS_AZURE = 'api.cognitive.microsoft.com/bing/v7.0/spellcheck';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpellcheckService {
 
-  private API: SpellcheckAPI;
+  private API;
   private sentenceStart;
 
   constructor(private httpClient: HttpClient) {
     // take own API as default
-    this.API = SpellcheckAPI.OWN;
+    this.API = spellcheckAPI.OWN;
     this.sentenceStart = [];
   }
 
@@ -41,7 +40,7 @@ export class SpellcheckService {
   }
 
 
-  public setAPI(API: SpellcheckAPI): void {
+  public setAPI(API): void {
     this.API = API;
   }
 
@@ -162,14 +161,14 @@ export class SpellcheckService {
 
     switch (this.API) {
 
-      case SpellcheckAPI.OWN: {
+      case spellcheckAPI.OWN: {
         requestData = { words, languageCode };
         if (editDist) { const key = 'editDist'; requestData[key] = editDist; }
         if (numSuggestions) { const key = 'numSuggestions'; requestData[key] = numSuggestions; }
         return requestData;
       }
 
-      case SpellcheckAPI.MS_AZURE:
+      case spellcheckAPI.MS_AZURE:
         // create and return request according to the MS spellcheck documentation
         // https://docs.microsoft.com/en-us/azure/cognitive-services/bing-spell-check/quickstarts/nodejs
         requestData = null;
@@ -190,4 +189,12 @@ export class SpellcheckService {
     }
   }
 
+
+function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/spelling"; 
+  return result;  
 }

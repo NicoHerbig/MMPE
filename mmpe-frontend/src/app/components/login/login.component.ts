@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 
   signIn() {
     
-    const url = "http://localhost:3000/middleware/validate";
+    const url = getBaseLocation();
     const salt = bcrypt.genSaltSync(10);
     const password = bcrypt.hashSync(this.authForm.value.password, salt);
     const payload = {'email':this.authForm.value.email, 'password': password, 'salt':salt};
@@ -61,4 +61,13 @@ export class LoginComponent implements OnInit {
     
     this.authService.signIn(this.authForm.value);
   }
+}
+
+function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let result = arr[0] + "//" + arr[2].split(":")[0];
+  result = result + path + "/middleware/validate";
+  return result;
 }

@@ -27,7 +27,7 @@ export class EyetrackingService {
   private speechService: SpeechService;
 
   constructor(private logService: LogService) {
-    this.ws = new WebSocket('ws://localhost:3000/eyeTracking/getEyeData');
+    this.ws = new WebSocket(getBaseLocation());
     this.ws.onopen = () => {
       console.log('Connected to eyetracking websocket server');
     };
@@ -141,4 +141,19 @@ export class EyetrackingService {
     this.componentOffsetY = componentOffsetY;
     this.speechService = speechService;
   }
+}
+
+function getBaseLocation() {
+  let url = window.location.href;
+  let arr = url.split("/");
+  let path = ":3000";
+  let protocol: string;
+  if (arr[0] == "https:") {
+    protocol = "wss:";
+  } else {
+    protocol = "ws:";
+  }
+  let result = protocol + "//" + arr[2].split(":")[0];
+  result = result + path + "/eyeTracking/getEyeData";
+  return result;
 }
