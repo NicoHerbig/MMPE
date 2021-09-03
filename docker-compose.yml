@@ -1,8 +1,37 @@
-version: '2' # specify docker-compose version
+version: '3'
 
-# Define the services/containers to be run
+networks:
+  mmpe:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+
 services:
-  express: #name of the service
-    build: mmpe-server # specify the directory of the Dockerfile
+
+  mmpe-ipe:
+    image: 'dfki/mmpe-ipe:1.0.0'
+    networks:
+      - mmpe
+    container_name: mmpe-ipe
+    restart: always
+
+  mmpe-core:
+    depends_on:
+      - mmpe-ipe
+    image: 'dfki/mmpe-core:1.0.0'
+    networks:
+      - mmpe
+    container_name: mmpe-core
+    restart: always
+    volumes:
+      - './mmpe-server/data/projects:/usr/src/app/data/projects'
+      - './mmpe-server/config.json:/usr/src/app/config.json:ro'
+      - './mmpe-frontend/src/assets/config.json:/usr/share/nginx/html/assets/config.json:ro'
+    environment:
+      - IPE_URL=http://mmpe-ipe:8000/api/alternatives
     ports:
-      - "3000:3000" #specify ports forwarding
+      - '80:80'
+      - '443:443'
+      - '3000:3000'
+      - '3002:3002'

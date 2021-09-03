@@ -1,0 +1,11 @@
+# by default, ignore everything
+**
+
+# allowed files and folders
+!/nginx-*
+!/mmpe-server/**
+!/mmpe-frontend/**
+
+# ignore inside allowed directories
+**/node_modules
+**/dist

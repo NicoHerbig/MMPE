@@ -1,0 +1,5 @@
+# by default, ignore everything
+**
+
+# allowed files and folders
+!/python-backend/**

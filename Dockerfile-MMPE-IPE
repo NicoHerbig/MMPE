@@ -1,0 +1,46 @@
+FROM continuumio/miniconda3:4.10.3p0
+
+MAINTAINER Joerg Steffen <steffen@dfki.de>
+LABEL description="Docker container of MMPE IPE Server (interactive post-editing)"
+
+ARG user=ipe
+ARG group=ipe
+ARG uid=1000
+ARG gid=1000
+# app home will also be used as user home
+ARG app_home=/MMPE-IPE
+# conda environment name, must be the same as specified in environment.yml
+ARG conda_env=ipe
+
+# setup Debian user
+RUN addgroup -gid $gid $group \
+  && adduser --home "$app_home" --uid $uid --gid $gid --disabled-password --gecos "" $user
+
+# copy app
+COPY python-backend $app_home
+
+# give user access to app
+RUN chown -R $user:$group $app_home
+
+# allow user to setup conda environment
+RUN addgroup conda \
+  && chgrp -R conda /opt/conda/ \
+  && chmod g+w -R /opt/conda/ \
+  && adduser $user conda
+
+# setup conda environment as user
+USER $user
+WORKDIR $app_home
+RUN conda env create -f environment.yml \
+  && conda clean --all
+
+# activate conda environment when user logs in
+RUN echo 'CONDA_BASE=$(conda info --base)' >> $app_home/.bashrc \
+  && echo 'source $CONDA_BASE/etc/profile.d/conda.sh' >> $app_home/.bashrc \
+  && echo "conda activate $conda_env" >> $app_home/.bashrc
+ENV PATH /opt/conda/envs/$conda_env/bin:$PATH
+
+# run Uvicorn server in conda environment when container starts
+WORKDIR $app_home/ende_ctranslate2-v2
+ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0"]
+EXPOSE 8000

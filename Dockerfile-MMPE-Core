@@ -1,0 +1,52 @@
+# build stage
+FROM node:12 AS buildstage
+
+LABEL maintainer="Joerg Steffen <steffen@dfki.de>"
+LABEL description="Docker container of MMPE core with server and frontend"
+
+WORKDIR /usr/src/app
+COPY mmpe-frontend/package.json mmpe-frontend/package-lock.json ./
+RUN npm install
+# patch readable-blob-stream module
+RUN sed -i "s/var Readable = require('stream').Readable;/var Readable = require('readable-stream').Readable;/g" \
+  ./node_modules/readable-blob-stream/index.js
+COPY mmpe-frontend/. .
+RUN ./node_modules/.bin/ng build --prod --aot=false --build-optimizer=false
+
+# app stage
+FROM nginx:1.21.1 AS appstage
+
+# install dependencies
+RUN apt-get update && \
+  apt-get install -y git python-minimal build-essential && \
+  rm -rf /var/lib/apt/lists/*
+
+# install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash - && \
+  apt-get install -y nodejs
+
+# install mmpe-server
+WORKDIR /usr/src/app
+COPY mmpe-server/package.json mmpe-server/package-lock.json ./
+RUN npm install
+COPY mmpe-server/. .
+RUN bash -c \
+  'echo -e "cd /usr/src/app\n/usr/bin/node server.js &" \
+  > /docker-entrypoint.d/40-start-mmpe-server.sh'
+RUN chmod 775 /docker-entrypoint.d/40-start-mmpe-server.sh
+ENV MMPE_PORT 2000
+ENV WATSON_PORT 2002
+
+# copy mmpe-frontend from buildstage
+COPY --from=buildstage /usr/src/app/dist/mmpe-frontend /usr/share/nginx/html
+
+# configure Nginx
+RUN rm /etc/nginx/conf.d/default.conf
+RUN mkdir /etc/nginx/templates
+COPY nginx-mmpe.conf.template /etc/nginx/templates
+COPY nginx-ssl-cert-snakeoil.pem /etc/ssl/certs
+RUN chmod 644 /etc/ssl/certs/nginx-ssl-cert-snakeoil.pem
+COPY nginx-ssl-cert-snakeoil.key /etc/ssl/private
+RUN chmod 640 /etc/ssl/private/nginx-ssl-cert-snakeoil.key
+
+EXPOSE 80 443 3000 3002
