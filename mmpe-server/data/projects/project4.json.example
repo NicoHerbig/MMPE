@@ -1,0 +1,279 @@
+{
+  "projectid": 1,
+  "projectname": "DeepL Example Project",
+  "segments": [{
+      "id": 1,
+      "source": "Customers who once sold their vinyl to buy CDs are now selling their CDs to buy their records back, he says.",
+      "target": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen & quot;, sagt er. Ja was ist denn da los",
+      "mt": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": "op: C word:  CDs time: 10||"
+    }, {
+      "id": 2,
+      "source": "She hasn't lost an all-around competition since the summer of 2013, a winning streak that should go for as long as Biles wants it to.",
+      "target": "hat seit Sie Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "mt": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 3,
+      "source": "\"This is not solely to protect against electoral fraud, but to protect local government from the broader culture of corruption and financial fraud that goes hand in hand with it,\" he said.",
+      "target": "Es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Hier geht Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "mt": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL"
+    }, {
+      "id": 4,
+      "source": "A statement from the Kremlin said that Mr Putin had \"decreed to relieve Ivanov of his duties as head of the Russian presidential administration,\" but gave no reason.",
+      "target": "Eine Erklärung des sagte, dass hatte Aufgaben Kremls &quot;, Ivanow von russischen beschlossen Putin Leiter seinen der als Präsidialverwaltung zu aber entlasten&quot;, gab keinen Grund an.",
+      "mt": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 5,
+      "source": "Customers who once sold their vinyl to buy CDs are now selling their CDs to buy their records back, he says.",
+      "target": "Kunden , ihre Früher Vinyl, um CDs zu kaufen, verkaufen jetzt ihre CDs, um die ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "mt": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": "op: C word:  CDs time: 10||"
+    }, {
+      "id": 6,
+      "source": "She hasn't lost an all-around competition since the summer of 2013, a winning streak that should go for as long as Biles wants it to.",
+      "target": "Sie Sommer 2013 die verloren eine, gehen so Allround-Wettbewerb hat keinen seit Phase, lange siegreiche sollte, wie Biles es will.",
+      "mt": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 7,
+      "source": "\"This is not solely to protect against electoral fraud, but to protect local government from the broader culture of corruption and financial fraud that goes hand in hand with it,\" he said.",
+      "target": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "mt": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL"
+    }, {
+      "id": 8,
+      "source": "A statement from the Kremlin said that Mr Putin had \"decreed to relieve Ivanov of his duties as head of the Russian presidential administration,\" but gave no reason.",
+      "target": "des Kremls sagte, dass | Putin &quot; beschlossen hatte, Ivanow von seinen Aufgaben als Eine Erklärung Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "mt": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 9,
+      "source": "Customers who once sold their vinyl to buy CDs are now selling their CDs to buy their records back, he says.",
+      "target": "Kunden, Vinyl verkauften, CDs zu kaufen, verkaufen die jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "mt": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 0,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": "op: C word:  CDs time: 10||"
+    }, {
+      "id": 10,
+      "source": "She hasn't lost an all-around competition since the summer of 2013, a winning streak that should go for as long as Biles wants it to.",
+      "target": "hat Sommer Sie 2013 verloren Allround-Wettbewerb , lange keinen gehen eine siegreiche Phase, die so sollte, wie Biles es will.",
+      "mt": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 11,
+      "source": "\"This is not solely to protect against electoral fraud, but to protect local government from the broader culture of corruption and financial fraud that goes hand in hand with it,\" he said.",
+      "target": "nur es&quot; um Schutz vor Wahlbetrug, nicht sondern Hier darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "mt": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL"
+    }, {
+      "id": 12,
+      "source": "A statement from the Kremlin said that Mr Putin had \"decreed to relieve Ivanov of his duties as head of the Russian presidential administration,\" but gave no reason.",
+      "target": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an. Wieso geht das jetzt Aber ja so geht es!",
+      "mt": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 13,
+      "source": "Customers who once sold their vinyl to buy CDs are now selling their CDs to buy their records back, he says.",
+      "target": "Kunden, die früher ihre verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen, sagt er.",
+      "mt": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": "op: C word:  CDs time: 10||"
+    }, {
+      "id": 14,
+      "source": "She hasn't lost an all-around competition since the summer of 2013, a winning streak that should go for as long as Biles wants it to.",
+      "target": "Sommer seit Sie hat 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "mt": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 15,
+      "source": "\"This is not solely to protect against electoral fraud, but to protect local government from the broader culture of corruption and financial fraud that goes hand in hand with it,\" he said.",
+      "target": "um&quot;Hier geht es nicht nur Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "mt": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL"
+    }, {
+      "id": 16,
+      "source": "A statement from the Kremlin said that Mr Putin had \"decreed to relieve Ivanov of his duties as head of the Russian presidential administration,\" but gave no reason.",
+      "target": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an. Ja was ist denn das? Gut oder? Ja",
+      "mt": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 17,
+      "source": "Customers who once sold their vinyl to buy CDs are now selling their CDs to buy their records back, he says.",
+      "target": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "mt": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": "op: C word:  CDs time: 10||"
+    }, {
+      "id": 18,
+      "source": "She hasn't lost an all-around competition since the summer of 2013, a winning streak that should go for as long as Biles wants it to.",
+      "target": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will. Also cdbald zart geschrieben und kann man die Hand nach affegen",
+      "mt": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 19,
+      "source": "\"This is not solely to protect against electoral fraud, but to protect local government from the broader culture of corruption and financial fraud that goes hand in hand with it,\" he said.",
+      "target": "geht&quot;Hier es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "mt": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL"
+    }, {
+      "id": 20,
+      "source": "A statement from the Kremlin said that Mr Putin had \"decreed to relieve Ivanov of his duties as head of the Russian presidential administration,\" but gave no reason.",
+      "target": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "mt": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 21,
+      "source": "Customers who once sold their vinyl to buy CDs are now selling their CDs to buy their records back, he says.",
+      "target": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "mt": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": "op: C word:  CDs time: 10||"
+    }, {
+      "id": 22,
+      "source": "She hasn't lost an all-around competition since the summer of 2013, a winning streak that should go for as long as Biles wants it to.",
+      "target": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "mt": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 23,
+      "source": "\"This is not solely to protect against electoral fraud, but to protect local government from the broader culture of corruption and financial fraud that goes hand in hand with it,\" he said.",
+      "target": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "mt": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL"
+    }, {
+      "id": 24,
+      "source": "A statement from the Kremlin said that Mr Putin had \"decreed to relieve Ivanov of his duties as head of the Russian presidential administration,\" but gave no reason.",
+      "target": "Eine Erklärung des Kremls, dass Putin &quot; beschlossen hatte sagte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "mt": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 25,
+      "source": "Customers who once sold their vinyl to buy CDs are now selling their CDs to buy their records back, he says.",
+      "target": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "mt": "Kunden, die früher ihre Vinyl verkauften, um CDs zu kaufen, verkaufen jetzt ihre CDs, um ihre Aufzeichnungen zurückzukaufen &quot;, sagt er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": "op: C word:  CDs time: 10||"
+    }, {
+      "id": 26,
+      "source": "She hasn't lost an all-around competition since the summer of 2013, a winning streak that should go for as long as Biles wants it to.",
+      "target": "Sie Sommer 2013 keinen eine seit Allround-Wettbewerb hat verloren, sollte siegreiche Phase, die so lange gehen, wie Biles es will.",
+      "mt": "Sie hat seit Sommer 2013 keinen Allround-Wettbewerb verloren, eine siegreiche Phase, die so lange gehen sollte, wie Biles es will.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }, {
+      "id": 27,
+      "source": "\"This is not solely to protect against electoral fraud, but to protect local government from the broader culture of corruption and financial fraud that goes hand in hand with it,\" he said.",
+      "target": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "mt": "&quot;Hier geht es nicht nur um Schutz vor Wahlbetrug, sondern darum, die lokale Regierung vor der breiteren Kultur der Korruption und des Finanzbetrugs zu schützen, die Hand in Hand mit ihm geht&quot;, sagte er.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL"
+    }, {
+      "id": 28,
+      "source": "A statement from the Kremlin said that Mr Putin had \"decreed to relieve Ivanov of his duties as head of the Russian presidential administration,\" but gave no reason.",
+      "target": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "mt": "Eine Erklärung des Kremls sagte, dass Putin &quot;beschlossen hatte, Ivanow von seinen Aufgaben als Leiter der russischen Präsidialverwaltung zu entlasten&quot;, gab aber keinen Grund an.",
+      "sourceLanguage": "EN-US",
+      "targetLanguage": "DE-DE",
+      "segmentStatus": 2,
+      "visualizationIPE": "mmpe-DeepL",
+      "keylog": ""
+    }
+  ]
+}

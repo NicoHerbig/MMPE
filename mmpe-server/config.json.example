@@ -10,7 +10,7 @@
     "passwords": ["somePassword"]
   },
   "projectIDs": {
-    "projects":[[1]]
+    "projects":[[1, 2, 3, 4]]
   },
   "mmpePort": 3000,
   "watsonPort": 3002,
