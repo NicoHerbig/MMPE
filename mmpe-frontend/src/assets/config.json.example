@@ -10,6 +10,7 @@
   "enableQualityEstimation":false,
   "enableHandwriting": true,
   "enableMidairGestures": true,
+  "enableIPE": true,
   "speechLanguage": "de-DE",
   "speechModelCustomizationID": null
 }
