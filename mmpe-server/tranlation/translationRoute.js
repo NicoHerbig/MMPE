@@ -2,10 +2,14 @@ const router = require('express').Router();
 const axios = require('axios');
 const { RSA_NO_PADDING } = require('constants');
 
+const config = require("../config.json");
+
 //send post request for hypotheses
 router.route('/alternatives').post(
     function(req, res) {
-        axios.post('http://localhost:8000/api/alternatives', {
+        // this can potentially point to another server;
+        // so make this URL configurable via config file and environment variable
+        axios.post(process.env.IPE_URL || config.ipeUrl, {
             ...req.body
         }, {
             'content-type': 'application/json',
