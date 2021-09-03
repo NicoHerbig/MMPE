@@ -94,8 +94,8 @@ export function comparison(sentence1, sentence2) {
    
     //A = 1, D = 2, S = 3,
 
-    let comp1Array = this.compSent1(sent1, sent2);
-    let comp2Array = this.compSent2(sent1, sent2, comp1Array);
+    let comp1Array = compSent1(sent1, sent2);
+    let comp2Array = compSent2(sent1, sent2, comp1Array);
     return {comp1Array, comp2Array};
 
   }
@@ -180,7 +180,7 @@ export function highlight(ref, hyp, comp, cat) {
   var newRef = ref.trim().split(" ").filter(x => x !== '').join(' ');
   var newHyp = hyp.trim().split(" ").filter(x => x !== '').join(' ');
 
-    return this.getNewWordsFromMajorChanges(newRef, newHyp);
+    return getNewWordsFromMajorChanges(newRef, newHyp);
 }
 
 export function HighlightDistant(ref, hyp, comp) {
