@@ -3,7 +3,7 @@
     "username": "youremail@address.de",
     "password": "yourPassword",
     "iamApikey": "yourApiKey",
-    "url": "https://stream-fra.watsonplatform.net/speech-to-text/api"
+    "url": "https://api.eu-de.speech-to-text.watson.cloud.ibm.com"
   },
    "loginCredentials": {
     "email_IDs": ["some@email.com"],

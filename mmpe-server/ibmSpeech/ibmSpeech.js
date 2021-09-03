@@ -58,7 +58,7 @@ const sttCredentials = Object.assign(
         iam_apikey: config.ibmSpeech.iamApikey, // if using an RC service
         //url: process.env.AUTHORIZATION_API,
         //url: process.env.SPEECH_TO_TEXT_URL ? process.env.SPEECH_TO_TEXT_URL : SpeechToTextV1.URL,
-        url: 'https://stream-fra.watsonplatform.net/speech-to-text/api',
+        url: config.ibmSpeech.url,
         //version: 'v3.12.0'
     },
     vcapServices.getCredentials('speech_to_text') // pulls credentials from environment in bluemix, otherwise returns {}
