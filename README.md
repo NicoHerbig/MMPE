@@ -11,6 +11,7 @@ This project was funded in part by the German Research Foundation (DFG) under gr
 - [Requirements](#requirements)
 - [Configuration](#configuration)
 - [Running the repository](#running-the-repository)
+- [Server deployment](#deployment)
 - [Create translation projects](#create-translation-projects)
 - [Contact](#contact)
 - [Troubleshooting during installation](#troubleshooting)
@@ -24,7 +25,6 @@ This project was funded in part by the German Research Foundation (DFG) under gr
 - [Notes regarding mid-air gesture functionality](#mid-air-gesture)
 - [Notes regarding quality estimation functionality](#quality-estimation)
 - [Notes regarding interactive post-editing (IPE) functionality](#ipe)
-- [Notes on deployment of the application on the remote server](#deployment)
 
 
 ## Repository overview <a name="repository-overview"></a>
@@ -33,24 +33,24 @@ The structure is:
 - mmpe-frontend: contains the Angular project which really is the frontend
 - mmpe-server: contains a simple node.js server responsible for project load & store, 
 as well as microservices like spellchecking
-- Python based backend: contains the functionality of generating multiple alternatives and clustering these alternaives into different categories. Download the complete folder by using this link https://drive.google.com/drive/folders/1Wd9dl6bDnPHsXLDjIGmTSL5RU7xOAuTf.
-- Attention: A python based backend folder is only needed when running the mmpe project for Interactive Post-Editing (IPE).
+- python-backend: providing interactive post-editing (IPE) functionality, i.e. generating multiple alternatives and clustering these alternatives into different categories. Note that IPE functionality is optional.
 
 ## Requirements <a name="requirements"></a>
 - node.js
 - Angular CLI
 - Ensure that git and python are in PATH.
-- Attention: You need to install additional the below-mentioned requirements if you want to use an interactive post-editing feature in mmpe.
-- install ctranslate2 model and their dependencies (Linux OS is mandatory to run ctranslate2 model). For further details to install ctranslate2, click on the following link https://github.com/OpenNMT/CTranslate2
-- install fastapi.
-- install nginx server.
-- install pm2 to keep alive the node server and uvicorn service.
+- For IPE only:
+    - Create a [Conda](https://conda.io) environment including all required dependencies by running
+      ```
+      conda env create -f python-backend/environment.yml
+      ```
+    - IPE requires a translation model not included in this repository. Use the convenient script `./download-ipe-model.sh` to add the model to your local installation. 
+    - Note that IPE only runs under Linux.
 
 ## Configuration <a name="configuration"></a>
 The projects won't really work without configuration. We prepared dummy config files that you can use as a basis:
 - copy the file mmpe-frontend/src/assets/config.json.example to mmpe-frontend/src/assets/config.json (copy and remove the .example)
     - for the project to run, you have to at least copy the example file
-    - to see translation projects, create them in mmpe-server/data/projects. You can use project1.json.example and remove the ".example" part to get a starting point. For more information on projects, check the section here in this Readme.
     - Deactivate features: MMPE has a lot features, from which you might not need or want all. To easily deactivate those, use the variables: "enableSpeech", "enableEyeTracking", "enableWhiteSpace", "enableSpellcheck", "enableHandwriting", "enableMidairGestures", "enableIPE"
     - to use handwriting: get a myScript application and hmac key, insert the credentials, and define the target language
     - to use speech: additionally set the "speechLanguage" and if you have custom IBM Watson model, the "speechModelCustomizationID"
@@ -61,26 +61,42 @@ The projects won't really work without configuration. We prepared dummy config f
     - to log in: add emails, passwords, and projects to the corresponding arrays
         - the email and password pairs at the same positions in the array allow you to log in
         - the list of integers at the same position in the projects defines which projects to see. They all start with "project" followed by the specified id.
-## Running the repository <a name="running-the-repository"></a>
-- go into each folder separately and run 'npm install'
-- then run both projects using 'npm start' (or a run configuration in your IDE)
-- open Chrome on localhost:4200 (other browsers most likely work too, but we tested on Chrome)
 
-To run the two projects (globally):
-------------------------
-- go into each folder separately and run 'npm install'
-- then run both projects using 'npm start' (or a run configuration in your IDE).
-- Attention: you need to run the following command only if you want to use an interactive post-editing in mmpe.
-- run uvicorn services using the following command : uvicorn main:app --reload. This would run fastapi. 
-- run the 'npm start' for node server and 'ng serve' for angular project to run locally and globally. 
+- to see translation projects, create them in mmpe-server/data/projects. You can use project*.json.example and remove the ".example" part to get a starting point. For more information on projects, check the section here in this Readme.
+
+## Running the repository <a name="running-the-repository"></a>
+- go into each mmpe folder separately and run `npm install`
+- then run both projects using `npm start` (or a run configuration in your IDE)
+- for IPE:
+  - activate the IPE Conda environment and start the uvicorn service
+    ```
+    conda activate ipe
+    cd python-backend/ende_ctranslate2-v2
+    uvicorn main:app --host 0.0.0.0 --reload
+    ```
+- open Chrome on localhost:4200 (other browsers most likely work too, but we tested on Chrome)
 
 Careful: while mmpe-frontend automatically rebuilds on changes, mmpe-server does not. If you want that, you can use nodemon or similar tools. Or simply restart after changes.
 
 To deploy the project (instead of running it for development), see the instructions below.
 
+## Server deployment <a name="deployment"></a>
+We provide Docker images for easy deployment of MMPE (including IPE). Docker images for both MMPE and IPE are defined in the corresponding Dockerfiles. Before building the images, first configure MMPE as described [above](#configuration) and also download the IPE translation model using `./download-ipe-model.sh`. Then build the Docker images by running `./build-docker-images.sh` in the top level folder of the distribution.
+
+Start MMPE by running `docker-compose up -d`. MMPE and IPE each run in a separate container within a Docker network. Note that MMPE configuration files as well as the projects folder are passed as bind mounts to the mmpe-core Docker container. This is to make sure that any configuration changes are applied when the MMPE containers are restarted. Also, any edits done in the projects are still available after a container restart.
+
+After deployment MMPE can be accessed via `https://<your-server-name>`. Note that we use a self-signed certificate, so click away the browser warning and continue to the MMPE login page.
+
+Note that eye tracking and mid-air gestures are not available with server deployment.
+
 ## Create translation projects <a name="create-translation-projects"></a>
 Translation projects need to be stored in mmpe-server/data/projects. 
-You can use project1.json.example and remove the ".example" part to get a starting point. 
+You can use project*.json.example and remove the ".example" part to get a starting point.
+  - project1.json is an example project without IPE
+  - project2.json is an example project with LMM IPE
+  - project3.json is an example project with LCD IPE
+  - project4.json is an example project with DeepL IPE
+
 To see the project in the interface, the user you log in with needs to have the project id in the list of projects within mmpe-frontend/src/assets/config.json, as described above.
 
 A translation project is simply a JSON file with the following structure:
@@ -112,7 +128,8 @@ A translation project is simply a JSON file with the following structure:
     - "mt" is just there to support reverting to it using a button in the support tools.
     - "sourceLanguage" and "targetLanguage" are currently not used but could be displayed somewhere if required.
     - "segmentStatus" defines the status of the segment which is displayed as an icon between source and target. It can be Confirmed = 0, Unconfirmed = 1, or Active = 2.
-    - "visualizationIPE" the user can choose between three visualizations namely: (1) mmpe-LMM (2) mmpe-LCD (3) mmpe-DeepL
+    - "visualizationIPE" the user can choose between three visualizations namely:
+      (1) mmpe-LMM (2) mmpe-LCD (3) mmpe-DeepL; for no IPE, just omit ""visualizationIPE"
 
 For certain studies, it might make sense to tell the translator what to do or ask after each segment how it was. 
 For this, we implemented a popup before/after each segment.
@@ -424,7 +441,7 @@ If you want to use our word-level QE visualizations, use a QE system to generate
 Note: This feature is based on the Master’s thesis “IPE: Enhancing Visualization of Multiple Alternatives for Interactive Post-Editing” by Atika Akmal.
 
 In Interactive Post-Editing, the user can post-edit a translated text by clicking on any word in the translation, which they want to change.
-To improve human-machine collaboration, We enhanced the visualization of multiple alternatives given by machine for the selected word during interactive post-editing. We used three different approaches to visualize the multiple alternatives as MMPE (DeepL, LMM, and LCD). MMPE-DeepL is a re-implementation of the DeepL tool to be compared to the other two ideas.
+To improve human-machine collaboration, we enhanced the visualization of multiple alternatives given by machine for the selected word during interactive post-editing. We used three different approaches to visualize the multiple alternatives as MMPE (DeepL, LMM, and LCD). MMPE-DeepL is a re-implementation of the DeepL tool to be compared to the other two ideas.
 1) To enable the IPE feature, the value of the "enableIPE" field in the mmpe-frontend/src/assets/config.json should be set true. 
 2) For interactive post-editing (IPE), the user can single-click on any word in the translation, and the popup with only one of the three visualizations, e.g., MMPE (DeepL, LMM, and LCD) as defined in the project file, will open. 
 3) The following image shows the MMPE-DeepL visualization. We did not highlight the changes and did not cluster the given alternatives because we want to keep consistent with the DeepL tool compared to other proposed approaches. 
@@ -436,27 +453,3 @@ To improve human-machine collaboration, We enhanced the visualization of multipl
 ![Pop Up](/assets/imgs/mmpe-lcd.png)
 
 6) Highlighting changes: In the above Figures, the newly inserted words are highlighted with green color, and the deleted words are highlighted with red color. Moreover, the stars in front of each proposal is the confidence score given by the machine.
-
-## Notes on deployment of the application on the remote server <a name="deployment"></a>
-For the client side code:
-1) Build the frontend in production mode by executing the command: `ng build --prod --base-href=/websites/mmpe/ --aot=false --build-optimizer=false`. Naturally change the base-href to whereever you want to host it on your machine.
-2) Copy everything within the output folder (dist/mmpe-frontend/ by default) to a folder on the server.
-3) Install nginx using the command: `sudo apt-get install nginx` (Of course you can also use apache or another webserver)
-4) Configure the server to redirect incoming requests to the created index.html by modifying the nginx config file.
-
-To run Python based backend (only needed if you want to use Interactive Post-Editing (IPE)):
-(1) run uvicorn services using the following command 'uvicorn main4:app --reload' on the terminal (main is a file name and this command will run fastapi).
-   
-
-For the deployment of the server side code, we use a dockerfile that has the following:
-1) An image with nodejs installed on it
-2) The server side code is added into the image and all its dependencies are installed.
-3) Port 3000 is exposed so that we can access it from our host machine.
-4) If all these requirements are met, we can run npm start in the container.
-To connect and run multiple containers with docker, we use Docker Compose. The `docker-compose.yml` file is a simple configuration file telling docker compose which continers to build. The command `docker-compose up` will build the images if not already built, and run them in the foreground (you see the output). If everything looks fine, run it in the background (as a deamon instead) by saying `docker-compose up -d`. Now, local requests from the server should already work (e.g. using curl).
-5) Finally, make the node.js server accessible form the outside. For this, modify the nginx config file to include: 
-        `location /server/ { proxy_pass http://127.0.0.1:3000;`
-        `rewrite ^/server/?(.*)$ /$1 break;`
-        `proxy_set_header Host $host;`
-        `proxy_set_header X-Real-IP $remote_addr;`
-        `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;}` so that nginx forwards the http requests for nodejs server to port 3000 of the host system, when asking for `<hostname>/server`
