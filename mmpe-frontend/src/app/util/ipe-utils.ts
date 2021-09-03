@@ -1,3 +1,4 @@
+import {SegmentDetailComponent} from '../components/segment-detail/segment-detail.component'; 
 
 //Highlighting minor changes
 export function getNewWords(ref, hyp) {
@@ -184,8 +185,8 @@ export function highlight(ref, hyp, comp, cat) {
 
 export function HighlightDistant(ref, hyp, comp) {
 
-  var refArray = ref.trim().replace(this.punctuationRegEx, '').split(" ");
-  var hypArray = hyp.trim().replace(this.punctuationRegEx, '').split(" ");
+  var refArray = ref.trim().replace(SegmentDetailComponent.punctuationRegEx, '').split(" ");
+  var hypArray = hyp.trim().replace(SegmentDetailComponent.punctuationRegEx, '').split(" ");
 
   let newWords = [];
   var myOutputHTML = "";
@@ -203,8 +204,8 @@ export function HighlightDistant(ref, hyp, comp) {
     }
   }
 
-  var refArray = ref.trim().replace(this.punctuationRegEx, '').split(" ");
-  var hypArray = hyp.trim().replace(this.punctuationRegEx, '').split(" ");
+  var refArray = ref.trim().replace(SegmentDetailComponent.punctuationRegEx, '').split(" ");
+  var hypArray = hyp.trim().replace(SegmentDetailComponent.punctuationRegEx, '').split(" ");
 
   //Loop highlight the deleted words in distant changes
   for(let i = 0; i < refArray.length; i++) {
