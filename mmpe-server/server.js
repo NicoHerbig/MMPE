@@ -1,7 +1,7 @@
 const app = require('express')();
 const expressWs = require('express-ws')(app);
 const cors = require('cors');
-const serverPort = 3000;
+const config = require("./config.json");
 
 app.use(cors());
 
@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 require('./routing')(app);
 
 // run server
-app.listen(serverPort, function () {
-    console.log('MMPE-Server listening on port 3000!');
+let mmpePort = process.env.MMPE_PORT || config.mmpePort || 3000;
+app.listen(mmpePort, function () {
+    console.log('MMPE-Server listening on port %i', mmpePort);
 });

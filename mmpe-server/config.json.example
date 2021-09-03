@@ -11,5 +11,6 @@
   },
   "projectIDs": {
     "projects":[[1]]
-  }
+  },
+  "mmpePort": 3000
 }
