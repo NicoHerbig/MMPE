@@ -103,7 +103,7 @@ export class SegmentDetailComponent implements OnInit, OnChanges, AfterViewInit,
               public undoRedoService: UndoRedoService, private spanService: SpanService,
               private logService: LogService, private speechService: SpeechService,
               private touchService: TouchService, public dialog: MatDialog, private configService: ConfigService,
-              private midairGesturesService: MidairGesturesService) {
+              private midairGesturesService: MidairGesturesService, private translationService: TranslationService) {
 
     this.hotkeysService.add(new Hotkey('ctrl+z', (event: KeyboardEvent): boolean => {
       this.onUndo(false, event);
