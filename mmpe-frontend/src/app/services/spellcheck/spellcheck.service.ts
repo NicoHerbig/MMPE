@@ -188,7 +188,7 @@ export class SpellcheckService {
       return this.httpClient.post(this.API, body, options);
     }
   }
-
+}
 
 function getBaseLocation() {
   let url = window.location.href;
