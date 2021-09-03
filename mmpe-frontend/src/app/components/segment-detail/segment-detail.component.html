@@ -71,15 +71,15 @@
           >
           </div>
           <div *ngIf="enableIPE">
-          <div #mainDiv id = "tokenizeTranslation"></div><!-- Div to tokenize current translation-->
+          <div #mainDiv id = "mainDiv"></div><!-- Div to tokenize current translation-->
 
-          <div #mainDivLexicals id = "tokenizeLexicalHyp"></div><!-- this div is for lexicals -->
+          <div #mainDivLexicals id = "mainDivLexicals"></div><!-- this div is for lexicals -->
 
-          <div #mainDivLCD id = "tokenizeLCDHyp"></div><!-- for hyp sentence 'mmpe-lcd' interface-->
+          <div #mainDivLCD id = "mainDivLCD"></div><!-- for hyp sentence 'mmpe-lcd' interface-->
 
-          <div #mainDivDeepL id = "tokenizeDeepLHyp"></div><!-- This 'mainDivDeepL' is used to tokenize string for MMPE-DeepL visualization -->
+          <div #mainDivDeepL id = "mainDivDeepL"></div><!-- This 'mainDivDeepL' is used to tokenize string for MMPE-DeepL visualization -->
 
-          <div #mainDivHyp id = "removeIdenticalHyp"></div><!-- Div to remove identical hypotheses -->
+          <div #mainDivHyp id = "mainDivHyp"></div><!-- Div to remove identical hypotheses -->
           
           <!--Div to display alternatives in MMPE-DeepL style -->
           <div class="cstm-popup-div2" *ngIf = 'displayDeepLPopUp && listOfAlternatives != null' [ngStyle] = "{'left': leftX2, 'top': topY2 }">
