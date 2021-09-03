@@ -66,7 +66,7 @@ def generate_translate(input: TranslationInput):
         print("target_prefix:-", input.target_prefix)
         results = translator.translate_batch([tokenize(input.source)],
                 target_prefix=[tokenize(input.target_prefix)], num_hypotheses=input.num_hyp,
-                return_alternatives=True)
+                return_alternatives=True, return_scores=True)
         api_results = dict(minor_changes=[], major_changes=[])
         for r in results[0]:
             translation = detokenize(r['tokens'])
