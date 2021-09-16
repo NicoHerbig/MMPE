@@ -62,23 +62,22 @@ app.add_middleware(
 @app.post('/api/alternatives')
 def generate_translate(input: TranslationInput):
     print("we are in generate_translation function--------")
-    if input.target_prefix is not None:
-        print("target_prefix:-", input.target_prefix)
-        results = translator.translate_batch([tokenize(input.source)],
-                target_prefix=[tokenize(input.target_prefix)], num_hypotheses=input.num_hyp,
-                return_alternatives=True, return_scores=True)
-        api_results = dict(minor_changes=[], major_changes=[])
-        for r in results[0]:
-            translation = detokenize(r['tokens'])
-            print("translation", translation)
-            score = r['score']
-            ter = wer(input.reference, translation)
-            if ter['wer_result'] < .2:
-                api_results['minor_changes'].append(dict(translation=translation, score=r['score'], ter=ter['wer_result']))
-            else:
-                api_results['major_changes'].append(dict(translation=translation, score=r['score'], ter=ter['wer_result']))      
+    if input.target_prefix:
+        tok_tar_pre = [tokenize(input.target_prefix)]
     else:
-        results = translator.translate_batch([tokenize(input.source)], num_hypotheses=input.num_hyp, return_alternatives=True)
-        api_results = [{'translation': detokenize(r['tokens']), 'score': r['score']} for r in results[0]]
+        tok_tar_pre = None
+    print("target_prefix:-", tok_tar_pre)
+    results = translator.translate_batch([tokenize(input.source)],
+            target_prefix=tok_tar_pre, num_hypotheses=input.num_hyp,
+            return_alternatives=True, return_scores=True)
+    api_results = dict(minor_changes=[], major_changes=[])
+    for r in results[0]:
+        translation = detokenize(r['tokens'])
+        print("translation", translation)
+        score = r['score']
+        ter = wer(input.reference, translation)
+        if ter['wer_result'] < .2:
+            api_results['minor_changes'].append(dict(translation=translation, score=r['score'], ter=ter['wer_result']))
+        else:
+            api_results['major_changes'].append(dict(translation=translation, score=r['score'], ter=ter['wer_result']))
     return api_results
-
