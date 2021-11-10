@@ -232,6 +232,7 @@ Before getting started, we recommend to look at the following papers/blog posts.
 - [A long version of the prototype focusing on the improvements after a study we ran](https://umtl.cs.uni-saarland.de/paper_preprints/paper_herbig_improving_MMPE.pdf)
 - [A blog post on MMPE in Kirti Vashee' "eMpTy Pages"](http://kv-emptypages.blogspot.com/2020/10/the-evolving-translator-computer.html)
 - [The ACL paper on mid-air hand gestures for PE MT](https://umtl.cs.uni-saarland.de/paper_preprints/paper_jamara_gesture_pe.pdf)
+- [The EMNLP paper on investigating the helpfulness of QE for PE MT](https://umtl.cs.uni-saarland.de/paper_preprints/paper_shenoy_QE_helpfulness.pdf)
 
 These and more publications can also be found on the [MMPE Website](https://mmpe.dfki.de)
 
@@ -286,6 +287,16 @@ If you use this project, please cite the publication containing the aspects you 
     url = "https://aclanthology.org/2021.acl-long.527",
     doi = "10.18653/v1/2021.acl-long.527",
     pages = "6763--6773",
+}
+
+@inproceedings{shenoy-etal-2021-investigating,
+    title = "Investigating the Helpfulness of Word-Level Quality Estimation for Post-Editing Machine Translation Output",
+    author = {Shenoy, Raksha and Herbig, Nico and Kr{\"u}ger, Antonio and van Genabith, Josef},
+    booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
+    year = "2021",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.emnlp-main.799",
+    pages = "10173--10185",
 }
 ```
 
@@ -416,6 +427,8 @@ The following instructions apply to Windows, but it should work similarly for ot
     ![Gesture Sensitivity](/assets/imgs/midairGestureSensitivity.png)
 
 ## Notes regarding quality estimation functionality <a name="quality-estimation"></a>
+Note: This feature is based on the Master’s thesis “ImpoWord MTQE: Impact of Word-Level Machine Translation Quality Estimation on Post-Editing Effort” by Raksha Shenoy, and the corresponding EMNLP 2021 paper "Investigating the Helpfulness of Word-Level Quality Estimation for Post-Editing Machine Translation Output".
+
 We explored word-level quality estimation to support the post-editing process. 
 Since this project focuses on the front-end, we do not include a real QE system here, but use existing QE tools to create word-level annotations. 
 If you want to use our word-level QE visualizations, use a QE system to generate an array per sentence defining which words are probably correct/incorrect. 
